@@ -41,19 +41,6 @@ void DriveWithJoystick::Execute()
 {
 	//CommandBase::pDriveTrain->Drive(CommandBase::pOI->GetJoystick());
 
-	double slowMode = 1.0;
-	if(CommandBase::pOI->GetJoystickDrive()->GetAButton())
-	{
-		slowMode = 0.55;
-	}
-
-	double controlDirectionMode = -1.0;
-
-	if(CommandBase::pOI->GetJoystickDrive()->GetBButton())
-	{
-		controlDirectionMode = 1.0;
-	}
-
 
 	double forwardSpeed = CommandBase::pOI->GetJoystickDrive()->GetY(XboxController::kLeftHand);
 	double turnAngle = CommandBase::pOI->GetJoystickDrive()->GetX(XboxController::kLeftHand);
@@ -67,9 +54,6 @@ void DriveWithJoystick::Execute()
 	{
 		turnAngle = 0.0;
 	}
-
-	forwardSpeed = forwardSpeed * controlDirectionMode * slowMode;
-	turnAngle = turnAngle * slowMode;
 
 	CommandBase::pDriveTrain->ArcadeDrive( forwardSpeed, turnAngle );
 
