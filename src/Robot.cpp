@@ -130,7 +130,8 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
-	std::cout << "[Robot] Running Scheduler" << std::endl;
+	//std::cout << "[Robot] Running Scheduler" << std::endl;
+
 	frc::Scheduler::GetInstance()->Run();
 
 	return;

@@ -39,11 +39,27 @@ void DriveWithJoystick::Initialize()
 
 void DriveWithJoystick::Execute()
 {
-	//CommandBase::pDriveTrain->Drive(CommandBase::pOI->GetJoystick());
+	// Right joystick Y axis = forward, backward
+	// Left joystic X axis = steering
+	// Right trigger = drive speed
+
+	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+//	frc::XboxController* pJoyOperator = CommandBase::pOI->GetJoystickOperator();
 
 
-	double forwardSpeed = CommandBase::pOI->GetJoystickDrive()->GetY(XboxController::kLeftHand);
-	double turnAngle = CommandBase::pOI->GetJoystickDrive()->GetX(XboxController::kLeftHand);
+	//double forwardSpeed = pJoyDriver->GetY(XboxController::kRightHand);
+	double turnAngle = pJoyDriver->GetX(XboxController::kLeftHand);
+
+	// Reverse the direction of the steering
+	turnAngle = -turnAngle;
+
+	double throttleLeft = pJoyDriver->GetTriggerAxis(frc::GenericHID::kLeftHand);
+	double throttleRight = pJoyDriver->GetTriggerAxis(frc::GenericHID::kRightHand);
+	double forwardSpeed = throttleLeft-throttleRight;
+
+	SmartDashboard::PutNumber("Driver Right Y axis:", forwardSpeed);
+	SmartDashboard::PutNumber("Driver Left X axis:", turnAngle);
+	SmartDashboard::PutNumber("Driver Right Trigger:", forwardSpeed);
 
 	if (fabs(forwardSpeed) <= XBOX_DEADZONE_LEFT_JOY)
 	{

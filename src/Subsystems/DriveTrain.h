@@ -30,6 +30,7 @@ public:
 
 	void Reset();
 
+
 private:
 	can::WPI_TalonSRX* pLeftFrontMotor;
 	can::WPI_TalonSRX* pLeftRearMotor;
@@ -43,3 +44,5 @@ private:
 };
 
 #endif
+
+

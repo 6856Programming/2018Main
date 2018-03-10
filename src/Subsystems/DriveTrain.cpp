@@ -1,9 +1,7 @@
 #include "DriveTrain.h"
 #include "../Commands/DriveWithJoystick.h"
-
-/**
- *
- */
+#include "../Commands/DebugTalonSRXTester.h"
+#include <iostream>
 
 DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 {
@@ -14,12 +12,18 @@ DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 	this->pLeftSpeedControllerGroup
 	                = new frc::SpeedControllerGroup( *(this->pLeftFrontMotor),
 			                                         *(this->pLeftRearMotor) );
+
+	this->pLeftSpeedControllerGroup->SetInverted(true);
+
 	//this->pLeftFrontMotor->SetInverted(true);
 	this->pRightFrontMotor = new can::WPI_TalonSRX(DRIVETRAIN_RIGHT_FRONT_MOTOR_ID);
 	this->pRightRearMotor = new can::WPI_TalonSRX(DRIVETRAIN_RIGHT_REAR_MOTOR_ID);
 	this->pRightSpeedControllerGroup
 	                = new frc::SpeedControllerGroup( *(this->pRightFrontMotor),
                                                      *(this->pRightRearMotor) );
+
+	this->pRightSpeedControllerGroup->SetInverted(true);
+
 
 	this->pRobotDrive
 	                = new frc::DifferentialDrive( *(this->pLeftSpeedControllerGroup),
@@ -55,7 +59,9 @@ void DriveTrain::InitDefaultCommand()
 {
 	std::cout << "[DriveTrain] Initialized Default Command" << std::endl;
 
-	SetDefaultCommand(new DriveWithJoystick());
+//	SetDefaultCommand(new DriveWithJoystick());
+
+	SetDefaultCommand(new DebugTalonSRXTester());
 
 	return;
 }
@@ -67,7 +73,9 @@ void DriveTrain::InitDefaultCommand()
 // Put methods for controlling this subsystem here.
 // Call these from Commands.
 
-void DriveTrain::Drive(XboxController* pJoystick)
+//Madi - We only use the first one... ArcadeDrive(forwardSpeed, turnAngle) !!!
+
+void DriveTrain::Drive(XboxController* pJoystick) //This needs to use the driver joystick
 {
 	double forwardSpeed = pJoystick->GetY(XboxController::kLeftHand);
 	double turnAngle = pJoystick->GetX(XboxController::kLeftHand);
@@ -80,7 +88,7 @@ void DriveTrain::Drive(XboxController* pJoystick)
 void DriveTrain::ArcadeDrive( double xSpeed, double zRotation )
 {
 	// Taken from DriveTrain::Drive()
-	this->pRobotDrive->ArcadeDrive(xSpeed, zRotation);
+	this->pRobotDrive->ArcadeDrive(xSpeed, -zRotation);
 
 	return;
 }
