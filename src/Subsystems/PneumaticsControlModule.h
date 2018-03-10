@@ -28,9 +28,15 @@ public:
 
 	void CylinderExtend(void); //Solenoid is ON, cylinder is in extended position
 
+	void CompressorOn(void);
+	void CompressorOff(void);
+
 
 private:
-	frc::Solenoid* pGripperSolenoid;   //i am not sure about the declaration of this command
+	frc::DoubleSolenoid* m_pGripperSolenoid;   //i am not sure about the declaration of this command
+
+	Compressor* m_pCompressor;
+
 
 };
 

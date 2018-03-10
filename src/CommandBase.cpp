@@ -1,5 +1,6 @@
 #include "CommandBase.h"
 #include "Subsystems/DriveTrain.h"
+#include "Subsystems/PneumaticsControlModule.h"
 
 /**
  *
@@ -7,7 +8,8 @@
 
 DriveTrain* CommandBase::pDriveTrain = NULL;
 OI* CommandBase::pOI = NULL;
-//Intake* CommandBase::pIntake = NULL;
+PneumaticsControlModule* CommandBase::pGripper = NULL;
+
 
 CommandBase::CommandBase() : Command()
 {
@@ -25,7 +27,7 @@ CommandBase::CommandBase() : Command()
 CommandBase::~CommandBase()
 {
 	delete this->pDriveTrain;
-//	delete this->pIntake;
+	delete this->pGripper;
 	delete this->pOI;
 
 	return;
@@ -66,11 +68,10 @@ void CommandBase::init()
 		CommandBase::pDriveTrain = new DriveTrain();
 	}
 
-//	if (CommandBase::pIntake == nullptr)
-//	{
-//		CommandBase::pIntake = new Intake();
-//	}
-
+	if (CommandBase::pGripper == NULL)
+	{
+		CommandBase::pGripper = new PneumaticsControlModule();
+	}
 	return;
 }
 

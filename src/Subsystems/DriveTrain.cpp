@@ -59,9 +59,9 @@ void DriveTrain::InitDefaultCommand()
 {
 	std::cout << "[DriveTrain] Initialized Default Command" << std::endl;
 
-//	SetDefaultCommand(new DriveWithJoystick());
+	SetDefaultCommand(new DriveWithJoystick());
 
-	SetDefaultCommand(new DebugTalonSRXTester());
+	//SetDefaultCommand(new DebugTalonSRXTester());
 
 	return;
 }

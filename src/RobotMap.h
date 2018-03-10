@@ -12,6 +12,9 @@ const int DRIVETRAIN_GRIPPER_WHEEL_RIGHT_MOTOR_ID = 6;
 const int DRIVETRAIN_GRIPPER_ARMS_MOTOR_ID = 7;
 const int DRIVETRAIN_WINCH_MOTOR_ID = 8;
 
+// Compressor
+const int COMPRESSOR_ID = 0;		// Is showing as device 0 on web dashboard
+
 
 const int GRIPPER_WHEEL_LEFT_MOTOR_ID = 9; //Added Feb 18/2018
 const int GRIPPER_WHEEL_RIGHT_MOTOR_ID = 10; //Added Feb 18/2018
@@ -19,7 +22,8 @@ const int GRIPPER_WHEEL_RIGHT_MOTOR_ID = 10; //Added Feb 18/2018
 const int FORKED_WHEEL_LEFT_MOTOR_ID = 11;
 const int FORKED_WHEEL_RIGHT_MOTOR_ID = 12;
 
-const int PNEUMATIC_CONTROL_MODULE_ID = 0; //Added Feb 25/2018
+const int PNEUMATIC_CONTROL_FORWARD_CHANNEL = 0;
+const int PNEUMATIC_CONTROL_REVERSE_CHANNEL = 1;
 
 //TODO: The gripper has a digital input, but I'm not sure what it's for...
 const int GRIPPER_DIGITAL_INPUT_1 = 1;
