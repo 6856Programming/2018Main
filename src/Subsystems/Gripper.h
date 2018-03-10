@@ -1,5 +1,5 @@
-#ifndef SRC_SUBSYSTEMS_PNEUMATICSCONTROLMODULE_H_
-#define SRC_SUBSYSTEMS_PNEUMATICSCONTROLMODULE_H_
+#ifndef SRC_SUBSYSTEMS_GRIPPER_H_
+#define SRC_SUBSYSTEMS_GRIPPER_H_
 
 /*
  * PneumaticsControlModule.h
@@ -16,17 +16,17 @@
 #include <DigitalInput.h>
 #include "../RobotMap.h"
 
-class PneumaticsControlModule : public frc::Subsystem
+class Gripper : public frc::Subsystem
 {
 public:
-	PneumaticsControlModule();				//constructer for pneumatic controller
-	virtual ~PneumaticsControlModule();		//destructer for pneumatic controller
+	Gripper();				//constructer for pneumatic controller
+	virtual ~Gripper();		//destructer for pneumatic controller
 
 	void InitDefaultCommand() override;
 
-	void CylinderRetract(void); //Solenoid is OFF, cylinder is in retracted position
+	void Open(void); //Madi- The motor will open the forks
 
-	void CylinderExtend(void); //Solenoid is ON, cylinder is in extended position
+	void Close(void); //Madi - The motor will close the forks
 
 	void CompressorOn(void);
 	void CompressorOff(void);
@@ -37,10 +37,15 @@ private:
 
 	Compressor* m_pCompressor;
 
+	frc::DigitalInput*  m_pContact;		// On Rio PID pins, number 0 to ??
+
+	//Looking at code from DriveTrain.h
+	can::WPI_TalonSRX* m_pLeftGripperMotor;
+	can::WPI_TalonSRX* m_pRightGripperMotor;
 
 };
 
-#endif /* SRC_SUBSYSTEMS_PNEUMATICSCONTROLMODULE_H_ */
+#endif /* SRC_SUBSYSTEMS_GRIPPER_H_ */
 
 
 

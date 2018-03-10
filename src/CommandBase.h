@@ -6,8 +6,9 @@
 #include "Commands/Command.h"
 #include "OI.h"
 #include "Subsystems/DriveTrain.h"
-#include "Subsystems/PneumaticsControlModule.h"
-//#include "Subsystems/Intake.h"
+#include "Subsystems/Gripper.h"
+#include "Subsystems/LiftMast.h"
+
 
 /**
  *
@@ -22,8 +23,8 @@ public:
 	static void init();
 	static OI *pOI;
 	static DriveTrain *pDriveTrain;
-	static PneumaticsControlModule* pGripper;
-//	static Intake *pIntake;
+	static Gripper* pGripper;
+	static LiftMast* pLiftMast;
 };
 
 #endif

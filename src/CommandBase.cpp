@@ -1,6 +1,4 @@
 #include "CommandBase.h"
-#include "Subsystems/DriveTrain.h"
-#include "Subsystems/PneumaticsControlModule.h"
 
 /**
  *
@@ -8,7 +6,8 @@
 
 DriveTrain* CommandBase::pDriveTrain = NULL;
 OI* CommandBase::pOI = NULL;
-PneumaticsControlModule* CommandBase::pGripper = NULL;
+Gripper* CommandBase::pGripper = NULL;
+LiftMast* CommandBase::pLiftMast = NULL;
 
 
 CommandBase::CommandBase() : Command()
@@ -29,6 +28,7 @@ CommandBase::~CommandBase()
 	delete this->pDriveTrain;
 	delete this->pGripper;
 	delete this->pOI;
+	delete this->pLiftMast;
 
 	return;
 }
@@ -58,20 +58,26 @@ void CommandBase::init()
 	//	regular variables that are created (and are unique)
 	//	to the 'instance' of the object.
 
-	if (CommandBase::pOI == nullptr)
+	if (CommandBase::pOI == NULL)
 	{
 		CommandBase::pOI = new OI();
 	}
 
-	if (CommandBase::pDriveTrain == nullptr)
+	if (CommandBase::pDriveTrain == NULL)
 	{
 		CommandBase::pDriveTrain = new DriveTrain();
 	}
 
 	if (CommandBase::pGripper == NULL)
 	{
-		CommandBase::pGripper = new PneumaticsControlModule();
+		CommandBase::pGripper = new Gripper();
 	}
+
+	if (CommandBase::pLiftMast == NULL)
+	{
+		CommandBase::pLiftMast = new LiftMast();
+	}
+
 	return;
 }
 

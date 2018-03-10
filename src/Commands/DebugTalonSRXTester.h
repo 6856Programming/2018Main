@@ -6,7 +6,8 @@
 #include "../CommandBase.h"
 
 /**
- *
+ *		THIS IS NOT REALLY TO BE USED ON THE ACTUAL ROBOT.
+ *		IT WAS JUST HERE TO QUICKLY TEST THE TALON MOTOR CONTROLLERS.
  */
 
 class DebugTalonSRXTester: public CommandBase

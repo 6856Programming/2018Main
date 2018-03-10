@@ -1,10 +1,10 @@
-#include "PneumaticsControlModule.h"
+#include "Subsystems/Gripper.h"
 #include "../Commands/GripperControl.h"
 
 //..\src\Subsystems\PneumaticsControlModule.cpp:10:50: error: no matching function for call to 'frc::Subsystem::Subsystem()'
 // PneumaticsControlModule::PneumaticsControlModule() {
 
-PneumaticsControlModule::PneumaticsControlModule() : frc::Subsystem("PneumaticsControlModule")
+Gripper::Gripper() : frc::Subsystem("Gripper")
 {
 	// TODO Auto-generated constructor stub
 
@@ -14,50 +14,54 @@ PneumaticsControlModule::PneumaticsControlModule() : frc::Subsystem("PneumaticsC
 
 	this->m_pCompressor = new Compressor(COMPRESSOR_ID);
 
+	this->m_pLeftGripperMotor = new can::WPI_TalonSRX(GRIPPER_WHEEL_LEFT_MOTOR_ID);
+	this->m_pRightGripperMotor = new can::WPI_TalonSRX(GRIPPER_WHEEL_RIGHT_MOTOR_ID);
+
+	this->m_pContact = new frc::DigitalInput(GRIPPER_DIGITAL_INPUT_1);
 
 	return;
 }
 
-PneumaticsControlModule::~PneumaticsControlModule()
+Gripper::~Gripper()
 {
 	// TODO Auto-generated destructor stub
 
 	return;
 }
 
-void PneumaticsControlModule::CompressorOn(void)
+void Gripper::CompressorOn(void)
 {
 	std::cout << "Compressor on" << std::endl;
 	this->m_pCompressor->SetClosedLoopControl(true);
 	return;
 }
 
-void PneumaticsControlModule::CompressorOff(void)
+void Gripper::CompressorOff(void)
 {
 	std::cout << "Compressor off" << std::endl;
 	this->m_pCompressor->SetClosedLoopControl(false);
 	return;
 }
 
-void PneumaticsControlModule::InitDefaultCommand()
+void Gripper::InitDefaultCommand()
 {
 	SetDefaultCommand(new GripperControl());
 
 	return;
 }
 
-void PneumaticsControlModule::CylinderRetract(void) //Solenoid is OFF, cylinder is in retracted position
+void Gripper::Open(void) //Solenoid is OFF, cylinder is in retracted position
 {
-	std::cout << "CylinderRetract()" << std::endl;
+	std::cout << "Gripper::Open()" << std::endl;
 
 	this->m_pGripperSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 
 	return;
 }
 
-void PneumaticsControlModule::CylinderExtend(void) //Solenoid is ON, cylinder is in extended position
+void Gripper::Close(void) //Solenoid is ON, cylinder is in extended position
 {
-	std::cout << "CylinderExtend()" << std::endl;
+	std::cout << "Gripper::Close()" << std::endl;
 
 	this->m_pGripperSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 

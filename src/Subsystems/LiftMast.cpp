@@ -5,6 +5,7 @@
  *      Author: Robotics - Wade Wilson
  */
 #include "LiftMast.h"
+#include "../Commands/LiftControl.h"
 #include <iostream>
 
 LiftMast::LiftMast() : frc::Subsystem("LiftMast")
@@ -19,6 +20,14 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 	return;
 }
 
+void LiftMast::DEBUG_SetMotorSpeed(double speed)
+{
+	this->m_pLiftMotor->Set(speed);
+
+	return;
+}
+
+
 LiftMast::~LiftMast()
 {
 	// TODO Auto-generated destructor stub
@@ -28,6 +37,7 @@ LiftMast::~LiftMast()
 
 void LiftMast::InitDefaultCommand()
 {
+	SetDefaultCommand(new LiftControl());
 
 	return;
 }

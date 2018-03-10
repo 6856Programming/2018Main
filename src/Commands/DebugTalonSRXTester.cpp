@@ -4,6 +4,10 @@
 
 #include <iostream>
 
+/**
+ *		THIS IS NOT REALLY TO BE USED ON THE ACTUAL ROBOT.
+ *		IT WAS JUST HERE TO QUICKLY TEST THE TALON MOTOR CONTROLLERS.
+ */
 
 DebugTalonSRXTester::DebugTalonSRXTester()
 {

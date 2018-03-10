@@ -40,7 +40,9 @@ public:
 
 	void Highest(); //Wade - Lift will assume highest height position for scale placement and the rung climb
 
-
+	// This really isn't supposed to be called, but is in here
+	//	so that we can have direct control of the motor...
+	void DEBUG_SetMotorSpeed(double speed);
 
 private:
 	frc::DigitalInput* m_pContactSwitch;

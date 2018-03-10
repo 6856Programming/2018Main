@@ -45,13 +45,13 @@ void GripperControl::Execute()
 
 	if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kLeftHand) )
 	{
-		std::cout << "GripperControl::CylinderRetract() called..." << std::endl;
-		CommandBase::pGripper->CylinderRetract();
+		std::cout << "GripperControl::Open() called..." << std::endl;
+		CommandBase::pGripper->Open();
 	}
 	else if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kRightHand) )
 	{
-		std::cout << "GripperControl::CylinderExtend() called..." << std::endl;
-		CommandBase::pGripper->CylinderExtend();
+		std::cout << "GripperControl::Close() called..." << std::endl;
+		CommandBase::pGripper->Close();
 	}
 
 
