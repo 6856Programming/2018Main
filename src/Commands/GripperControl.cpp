@@ -19,6 +19,11 @@ GripperControl::GripperControl()
 		std::cout << "[GripperControl] driveTrain is null!" << std::endl;
 	}
 
+	this->m_pClawOffTimer = new frc::Timer();
+
+	this->m_pClawOffTimer->Reset();
+	this->m_pClawOffTimer->Stop();
+
 
 	return;
 }
@@ -45,26 +50,60 @@ void GripperControl::Execute()
 
 	if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kLeftHand) )
 	{
-		std::cout << "GripperControl::Open() called..." << std::endl;
-		CommandBase::pGripper->Open();
+		//std::cout << "GripperControl::ClawOpen() called..." << std::endl;
+		CommandBase::pGripper->ClawOpen();
+		// Start timer
+		this->m_pClawOffTimer->Reset();
+		this->m_pClawOffTimer->Start();
 	}
 	else if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kRightHand) )
 	{
-		std::cout << "GripperControl::Close() called..." << std::endl;
-		CommandBase::pGripper->Close();
+		//std::cout << "GripperControl::ClawClose() called..." << std::endl;
+		CommandBase::pGripper->ClawClose();
+		// Start timer
+		this->m_pClawOffTimer->Reset();
+		this->m_pClawOffTimer->Start();
 	}
 
+	// Check the timer to see if the gripper motor has run to long
+	if ( this->m_pClawOffTimer->Get() >= GRIPPER_CLAW_SHUT_OFF_TIME )
+	{
+		std::cout << "Gripper: Claw timer timeout - turning off claw" << std::endl;
+		this->m_pClawOffTimer->Stop();
+		CommandBase::pGripper->ClawStop();
+	}
 
-	if ( pJoyDriver->GetXButtonReleased() )
+//	std::cout << this->m_pClawOffTimer->Get() << std::endl;
+
+	// For some reason, this will "pulse" the motor on and off with this code
+//	else
+//	{
+//		//std::cout << "GripperControl::ClawStop() called..." << std::endl;
+//		CommandBase::pGripper->ClawStop();
+//	}
+
+	double intakeSpeed = pJoyDriver->GetY(frc::GenericHID::kLeftHand);
+
+	// Check for deadzone on joystick
+	if ( fabs(intakeSpeed) < XBOX_DEADZONE_LEFT_JOY )
 	{
-		std::cout << "GripperControl::CompressorsOn() called..." << std::endl;
-		CommandBase::pGripper->CompressorOn();
+		intakeSpeed = 0.0;
 	}
-	else if ( pJoyDriver->GetYButtonReleased() )
-	{
-		std::cout << "GripperControl::CompressorOff() called..." << std::endl;
-		CommandBase::pGripper->CompressorOff();
-	}
+
+	CommandBase::pGripper->SetIntakeSpeed( -intakeSpeed );
+
+
+
+//	if ( pJoyDriver->GetXButtonReleased() )
+//	{
+//		std::cout << "GripperControl::CompressorsOn() called..." << std::endl;
+//		CommandBase::pGripper->CompressorOn();
+//	}
+//	else if ( pJoyDriver->GetYButtonReleased() )
+//	{
+//		std::cout << "GripperControl::CompressorOff() called..." << std::endl;
+//		CommandBase::pGripper->CompressorOff();
+//	}
 
 
 

@@ -21,6 +21,9 @@ public:
 
 
 private:
+
+	// This will
+	frc::Timer* m_pClawOffTimer;
 };
 
 

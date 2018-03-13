@@ -22,7 +22,7 @@ public:
 	void InitDefaultCommand() override;
 
 	// Original basic example drive, passing joystick. Calls ArcadeDrive()
-	void Drive(XboxController* joystick);
+//	void Drive(XboxController* joystick);
 	// These are the same as the DifferentialDrive class:
 	void ArcadeDrive( double xSpeed, double zRotation );
 	void CurvatureDrive( double xSpeed, double zRotation, bool isQuickTurn );

@@ -47,26 +47,30 @@ void DriveWithJoystick::Execute()
 //	frc::XboxController* pJoyOperator = CommandBase::pOI->GetJoystickOperator();
 
 
-	//double forwardSpeed = pJoyDriver->GetY(XboxController::kRightHand);
-	double turnAngle = pJoyDriver->GetX(XboxController::kLeftHand);
+	double forwardSpeed = pJoyDriver->GetY(XboxController::kRightHand);
+	double turnAngle = pJoyDriver->GetX(XboxController::kRightHand);
+
+	const double SLOW_SPEED_RATIO = 0.5;
+
+	if( ! pJoyDriver->GetStickButton(XboxController::kRightHand) )
+	{
+		forwardSpeed *= SLOW_SPEED_RATIO;
+		//turnAngle *= SLOW_SPEED_RATIO;
+	}
 
 	// Reverse the direction of the steering
-	turnAngle = -turnAngle;
+	//turnAngle = -turnAngle;
 
-	double throttleLeft = pJoyDriver->GetTriggerAxis(frc::GenericHID::kLeftHand);
-	double throttleRight = pJoyDriver->GetTriggerAxis(frc::GenericHID::kRightHand);
-	double forwardSpeed = throttleLeft-throttleRight;
 
 	SmartDashboard::PutNumber("Driver Right Y axis:", forwardSpeed);
 	SmartDashboard::PutNumber("Driver Left X axis:", turnAngle);
-	SmartDashboard::PutNumber("Driver Right Trigger:", forwardSpeed);
 
-	if (fabs(forwardSpeed) <= XBOX_DEADZONE_LEFT_JOY)
+	if (fabs(forwardSpeed) <= XBOX_DEADZONE_RIGHT_JOY)
 	{
 		forwardSpeed = 0.0;
 	}
 
-	if (fabs(turnAngle) <= XBOX_DEADZONE_LEFT_JOY)
+	if (fabs(turnAngle) <= XBOX_DEADZONE_RIGHT_JOY)
 	{
 		turnAngle = 0.0;
 	}

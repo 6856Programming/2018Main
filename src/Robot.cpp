@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Commands/AutonomousForward.h"
 
 /**
  *
@@ -77,7 +78,9 @@ void Robot::AutonomousInit()
 		std::cout << "Autonomous Command is null!" << std::endl;
 	}
 
+//	frc::Scheduler::GetInstance()->AddCommand(new )
 
+	frc::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 5.0, 0.2 ) );
 
 	return;
 }
@@ -100,6 +103,9 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit()
 {
 	std::cout << "[Robot] Teleop Initialized" << std::endl;
+
+	CommandBase::pGripper->Reset();
+	CommandBase::pDriveTrain->Reset();
 
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to

@@ -24,25 +24,30 @@ public:
 
 	void InitDefaultCommand() override;
 
-	void Open(void); //Madi- The motor will open the forks
+	void ClawOpen(void); //Madi- The motor will open the forks
+	void ClawClose(void); //Madi - The motor will close the forks
+	void ClawStop(void);	// Turns motor off
 
-	void Close(void); //Madi - The motor will close the forks
+	void SetIntakeSpeed(double speed);
 
-	void CompressorOn(void);
-	void CompressorOff(void);
+	void Reset(void);
+
+//	void CompressorOn(void);
+//	void CompressorOff(void);
 
 
 private:
-	frc::DoubleSolenoid* m_pGripperSolenoid;   //i am not sure about the declaration of this command
+//	frc::DoubleSolenoid* m_pGripperSolenoid;   //i am not sure about the declaration of this command
 
-	Compressor* m_pCompressor;
+//	Compressor* m_pCompressor;
 
 	frc::DigitalInput*  m_pContact;		// On Rio PID pins, number 0 to ??
 
 	//Looking at code from DriveTrain.h
-	can::WPI_TalonSRX* m_pLeftGripperMotor;
-	can::WPI_TalonSRX* m_pRightGripperMotor;
+	can::WPI_TalonSRX* m_pLeftIntakeMotor;
+	can::WPI_TalonSRX* m_pRightIntakeMotor;
 
+	can::WPI_TalonSRX* m_pClawMotor;
 };
 
 #endif /* SRC_SUBSYSTEMS_GRIPPER_H_ */
