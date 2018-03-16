@@ -1,4 +1,5 @@
 #include "CommandBase.h"
+
 /**
  *
  */
@@ -76,8 +77,6 @@ void CommandBase::init()
 	{
 		CommandBase::pLiftMast = new LiftMast();
 	}
-
-
 
 	return;
 }

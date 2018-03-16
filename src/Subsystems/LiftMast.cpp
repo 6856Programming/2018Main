@@ -13,8 +13,7 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 	// TODO Auto-generated constructor stub
 	std::cout << "[LiftMast] constructed" << std::endl;
 
-	this->m_pLiftMotor = new can::WPI_TalonSRX(LIFTER_WINCH_MOTOR_ID);
-
+	this->m_pLiftMotor = new can::WPI_TalonSRX(DRIVETRAIN_LIFTER_MOTOR_ID);
 
 	this->m_pContactSwitch = new frc::DigitalInput(LIFT_MAST_CONTACT_SWITCH);
 

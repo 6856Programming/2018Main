@@ -75,15 +75,15 @@ void DriveTrain::InitDefaultCommand()
 
 //Madi - We only use the first one... ArcadeDrive(forwardSpeed, turnAngle) !!!
 
-//void DriveTrain::Drive(XboxController* pJoystick) //This needs to use the driver joystick
-//{
-//	double forwardSpeed = pJoystick->GetY(XboxController::kLeftHand);
-//	double turnAngle = pJoystick->GetX(XboxController::kLeftHand);
-//
-//	this->pRobotDrive->ArcadeDrive(forwardSpeed, turnAngle);
-//
-//	return;
-//}
+void DriveTrain::Drive(XboxController* pJoystick) //This needs to use the driver joystick
+{
+	double forwardSpeed = pJoystick->GetY(XboxController::kLeftHand);
+	double turnAngle = pJoystick->GetX(XboxController::kLeftHand);
+
+	this->pRobotDrive->ArcadeDrive(forwardSpeed, turnAngle);
+
+	return;
+}
 
 void DriveTrain::ArcadeDrive( double xSpeed, double zRotation )
 {
