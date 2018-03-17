@@ -55,16 +55,13 @@ void GripperControl::Execute()
 	}
 
 
-	if ( pJoyDriver->GetXButtonReleased() )
-	{
-		std::cout << "GripperControl::CompressorsOn() called..." << std::endl;
-		CommandBase::pGripper->CompressorOn();
-	}
-	else if ( pJoyDriver->GetYButtonReleased() )
-	{
-		std::cout << "GripperControl::CompressorOff() called..." << std::endl;
-		CommandBase::pGripper->CompressorOff();
-	}
+//	NOW: A - intake in
+//	     B - intake out
+
+	// Gripper control:
+	// Push ONCE to do FULL close
+	// (i.e. They DON'T have to hold the button to move the claw)
+
 
 	Gripper* pGripper = ::CommandBase::pGripper;
 

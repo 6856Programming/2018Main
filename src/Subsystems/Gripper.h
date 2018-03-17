@@ -28,23 +28,47 @@ public:
 
 	void Close(void); //Madi - The motor will close the forks
 
-	void CompressorOn(void);
-	void CompressorOff(void);
+
+	void SetIntakeSpeed(double speed);
+
+	// This will run the intake for the desired speed.
+	// Each time it's called, the timer resets.
+	void PulseIntake(double speed, double time);
 
 	bool getGripperOpenLimitSwitchStatus(void);
 	bool getGripperClosedLimitSwitchStatus(void);
 
 private:
-	frc::DoubleSolenoid* m_pGripperSolenoid;   //i am not sure about the declaration of this command
 
-	Compressor* m_pCompressor;
+	// Limit switches on the "claw" portion
+	frc::DigitalInput* m_pClawOpenLimitSwitch;		// On Rio PID pins, number 0 and 1
+	frc::DigitalInput* m_pClawClosedLimitSwitch;
 
-	frc::DigitalInput* m_pGripperOpenLimitSwitch;		// On Rio PID pins, number 0 to ??
-	frc::DigitalInput* m_pGripperClosedLimitSwitch;
+	// Fail-safe timer in case the limit switches fail
+	frc::Timer* m_pClawMotorWatchDogTimer;
 
-	//Looking at code from DriveTrain.h
-	can::WPI_TalonSRX* m_pLeftGripperMotor;
-	can::WPI_TalonSRX* m_pRightGripperMotor;
+	// Motor to open and close the "claw"
+	can::WPI_TalonSRX* m_pClawMotor;
+
+
+	// Motors for the speed of the star shaped rubber wheels
+	can::WPI_TalonSRX* m_pLeftIntakeMotor;
+	can::WPI_TalonSRX* m_pRightIntakeMotor;
+
+	// "Pulse" timer for the intake motors
+	// (i.e. they will run for this length of time, then stop)
+	frc::Timer* m_pIntakeMotorPusledModeCountdownTimer;
+
+
+
+
+//  Gripper now electric, now, so no compressor
+//	void CompressorOn(void);					// public
+//	void CompressorOff(void);					// public
+//	frc::DoubleSolenoid* m_pGripperSolenoid;	// private
+//	Compressor* m_pCompressor;					// private
+
+
 
 };
 

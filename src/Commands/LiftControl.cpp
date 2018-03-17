@@ -42,17 +42,11 @@ void LiftControl::Execute()
 
 	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
 
-	// Lift motor speed controlled by LEFT joystick on DRIVER "y" axis (forward and back)
-	double liftSpeedAndDirection = pJoyDriver->GetY(XboxController::kLeftHand);
+	double trigLeft = pJoyDriver->GetTriggerAxis(frc::GenericHID::kLeftHand);
+	double trigRight = pJoyDriver->GetTriggerAxis(frc::GenericHID::kRightHand);
 
-//	const float SPEEDLIMIT = 0.5;
-//	if ( liftSpeedAndDirection > SPEEDLIMIT )
-//	{
-//		liftSpeedAndDirection = SPEEDLIMIT;
-//	}
+	double liftSpeedAndDirection = (trigRight - trigLeft) * LIFT_MAST_SPEED_RATIO;
 
-//	const double SPEEDRATIO = 0.1;
-//	liftSpeedAndDirection *= SPEEDRATIO;
 
 	CommandBase::pLiftMast->DEBUG_SetMotorSpeed(liftSpeedAndDirection);
 

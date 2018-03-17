@@ -1,5 +1,7 @@
 #include "Robot.h"
 
+#include "Commands/AutonomousForward.h"
+
 /**
  *
  */
@@ -62,22 +64,22 @@ void Robot::AutonomousInit()
 {
 	std::cout << "[Robot] Autonomous Initialized" << std::endl;
 
-	std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
-	std::cout << "[Robot] Auto Selected: " << autoSelected << std::endl;
+//	std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
+//	std::cout << "[Robot] Auto Selected: " << autoSelected << std::endl;
+//
+//	pAutonomousCommand = m_chooser.GetSelected();
+//
+//	if (pAutonomousCommand != nullptr)
+//	{
+//		std::cout << "[Robot] Starting autonomous" << std::endl;
+//		pAutonomousCommand->Start();
+//	}
+//	else
+//	{
+//		std::cout << "Autonomous Command is null!" << std::endl;
+//	}
 
-	pAutonomousCommand = m_chooser.GetSelected();
-
-	if (pAutonomousCommand != nullptr)
-	{
-		std::cout << "[Robot] Starting autonomous" << std::endl;
-		pAutonomousCommand->Start();
-	}
-	else
-	{
-		std::cout << "Autonomous Command is null!" << std::endl;
-	}
-
-
+	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 5.0 /*seconds*/, 0.5 ) );
 
 	return;
 }

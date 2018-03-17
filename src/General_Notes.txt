@@ -1,0 +1,15 @@
+General notes:
+
+Left joystick:
+- Y axis - intake in and out
+NOW: A - intake in 
+     B - intake out
+
+
+Trig right: - Mast up
+Trig left: - mast down
+// These will have to be changed 
+
+
+Bumper: Right - claw close
+        Left - claw open
