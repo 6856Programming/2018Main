@@ -1,15 +1,26 @@
 General notes:
 
-Left joystick:
-- Y axis - intake in and out
-NOW: A - intake in 
-     B - intake out
+Intake motors (rubber forked wheels):
+- A = "pulse" intake in  (currently 1 second)
+- B = "pulse" intake out (currently 1 second)
+
+Right joystick:
+- Y axis: forward-reverse speed
+- X axis: turn
+- Button (push joystick in): "Fast" speed
 
 
-Trig right: - Mast up
-Trig left: - mast down
-// These will have to be changed 
+Right trigger: mast up
+Left trigger:  mast down
 
+Right bumper: claw close
+Right bumper: claw open
 
-Bumper: Right - claw close
-        Left - claw open
+NOTE: 
+- Claw will stop with limit switches
+  (Will stop with EITHER switch pressed)
+- Claw motor will stop after X seconds, not matter what (currently 2 seconds)
+  (Can restart, but this is to prevent damage if limit switches fail/are messed up)
+
+  
+  
