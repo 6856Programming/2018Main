@@ -21,6 +21,17 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 	return;
 }
 
+bool LiftMast::getBottomLimitSwitch(void)
+{
+	return this->m_pLimitSwitchBottom->Get();
+}
+
+bool LiftMast::getTopLimitSwitchStatus(void)
+{
+	return this->m_pLimitSwitchTop->Get();
+}
+
+
 void LiftMast::DEBUG_SetMotorSpeed(double speed)
 {
 	this->m_pLiftMotor->Set(speed);
@@ -43,40 +54,45 @@ void LiftMast::InitDefaultCommand()
 	return;
 }
 
-//Wade - Lift will be in lowest position
-void LiftMast::Bottom()
-{
 
-	return;
-}
+// NOTE: There was some talk of having pre-set positions for the lift.
+//       These methods would move the lift to those positions.
+//       For now, we aren't going to do that (and there's a top and bottom switch, anyway)
+//
+//Wade - Lift will be in lowest position
+//void LiftMast::Bottom()
+//{
+//
+//	return;
+//}
 
 //Wade - Lift will assume height of 2 feet from floor for switch placement
-void LiftMast::SwitchHeight()
-{
-
-	return;
-}
+//void LiftMast::SwitchHeight()
+//{
+//
+//	return;
+//}
 
 //Wade - Lift will assume height of 5 feet from floor for scale placement if scale is in low position
-void LiftMast::ScaleLowHeight()
-{
-
-	return;
-}
+//void LiftMast::ScaleLowHeight()
+//{
+//
+//	return;
+//}
 
 //Wade - Lift will assume height of 5.8 feet from floor for scale placement at neutral level
-void LiftMast::ScaleNeutral()
-{
+//void LiftMast::ScaleNeutral()
+//{
+//
+//	return;
+//}
 
-	return;
-}
-
- //Wade - Lift will assume highest height position for scale placement and the rung climb
-void LiftMast::Highest()
-{
-
-	return;
-}
+//Wade - Lift will assume highest height position for scale placement and the rung climb
+//void LiftMast::Highest()
+//{
+//
+//	return;
+//}
 
 
 

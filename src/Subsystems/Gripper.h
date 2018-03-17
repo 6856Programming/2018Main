@@ -35,20 +35,40 @@ public:
 	// Each time it's called, the timer resets.
 	void PulseIntake(double speed, double time);
 
-	bool getGripperOpenLimitSwitchStatus(void);
-	bool getGripperClosedLimitSwitchStatus(void);
+	bool isClawOpenLimitSwitchPushed(void);
+	bool isClawClosedLimitSwitchPused(void);
+	bool areEitherClawLimitSwitchesPushed(void);
+
+
+	// This MUST be called repeatedly by whatever command is using this.
+	// (i.e. call this in the command Execute() or IsFinished() methods)
+	// +++++++++++++++++++ WARNING +++++++++++++++++++
+	// If you DON'T call this, the limit switches and pulsed
+	// mode operation WON'T WORK.
+	void UpdateState(void);
 
 private:
+
+	enum eClawState
+	{
+		IS_IDLE,
+		IS_OPENNING,
+		IS_CLOSING
+	};
+	double m_ClawMovementSpeed;
+	eClawState m_CurrentClawState;
 
 	// Limit switches on the "claw" portion
 	frc::DigitalInput* m_pClawOpenLimitSwitch;		// On Rio PID pins, number 0 and 1
 	frc::DigitalInput* m_pClawClosedLimitSwitch;
 
+	// Motor to open and close the "claw"
+	can::WPI_TalonSRX* m_pClawMotor;
+
 	// Fail-safe timer in case the limit switches fail
 	frc::Timer* m_pClawMotorWatchDogTimer;
 
-	// Motor to open and close the "claw"
-	can::WPI_TalonSRX* m_pClawMotor;
+
 
 
 	// Motors for the speed of the star shaped rubber wheels
@@ -57,7 +77,11 @@ private:
 
 	// "Pulse" timer for the intake motors
 	// (i.e. they will run for this length of time, then stop)
-	frc::Timer* m_pIntakeMotorPusledModeCountdownTimer;
+	frc::Timer* m_pPulsedIntakeCountdownTimer;
+	// The speed the intake will go when in pulsed mode
+	double m_PulsedIntakeSpeed;
+	double m_PulsedIntakePulseTimeInSeconds;
+	bool m_bPulsedIntakeModeOn;
 
 
 

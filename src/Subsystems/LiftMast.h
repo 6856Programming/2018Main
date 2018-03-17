@@ -30,26 +30,24 @@ public:
 
 	void InitDefaultCommand() override;
 
-	void Bottom(); //Wade - Lift will be in lowest position
-
-	void SwitchHeight(); //Wade - Lift will assume height of 2 feet from floor for switch placement
-
-	void ScaleLowHeight(); //Wade - Lift will assume height of 5 feet from floor for scale placement if scale is in low position
-
-	void ScaleNeutral(); //Wade - Lift will assume height of 5.8 feet from floor for scale placement at neutral level
-
-	void Highest(); //Wade - Lift will assume highest height position for scale placement and the rung climb
+// NOTE: There was some talk of having pre-set positions for the lift.
+//       These methods would move the lift to those positions.
+//       For now, we aren't going to do that (and there's a top and bottom switch, anyway)
+//	void Bottom(); //Wade - Lift will be in lowest position
+//	void SwitchHeight(); //Wade - Lift will assume height of 2 feet from floor for switch placement
+//	void ScaleLowHeight(); //Wade - Lift will assume height of 5 feet from floor for scale placement if scale is in low position
+//	void ScaleNeutral(); //Wade - Lift will assume height of 5.8 feet from floor for scale placement at neutral level
+//	void Highest(); //Wade - Lift will assume highest height position for scale placement and the rung climb
+//	void BottomPosition(void);
+//	void TopPosition(void);
 
 	// This really isn't supposed to be called, but is in here
 	//	so that we can have direct control of the motor...
 	void DEBUG_SetMotorSpeed(double speed);
 
-	void BottomPosition(void);
-
-	void TopPosition(void);
 
 
-	bool getBottomLimitSwitchStatus(void);
+	bool getBottomLimitSwitch(void);
 	bool getTopLimitSwitchStatus(void);
 
 private:

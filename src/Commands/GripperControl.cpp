@@ -43,6 +43,10 @@ void GripperControl::Execute()
 
 	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
 
+	// Gripper control:
+	// Push ONCE to do FULL close
+	// (i.e. They DON'T have to hold the button to move the claw)
+
 	if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kLeftHand) )
 	{
 		std::cout << "GripperControl::Open() called..." << std::endl;
@@ -55,18 +59,22 @@ void GripperControl::Execute()
 	}
 
 
-//	NOW: A - intake in
-//	     B - intake out
-
-	// Gripper control:
-	// Push ONCE to do FULL close
-	// (i.e. They DON'T have to hold the button to move the claw)
+//	NOW: A - intake in, B - intake out
 
 
 	Gripper* pGripper = ::CommandBase::pGripper;
 
-	::SmartDashboard::PutBoolean( "Gripper Open Limit", pGripper->getGripperOpenLimitSwitchStatus() );
-	::SmartDashboard::PutBoolean( "Gripper Closed Limit", pGripper->getGripperClosedLimitSwitchStatus() );
+	if ( pJoyDriver->GetAButtonPressed() )
+	{
+		pGripper->PulseIntake( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+	}
+	else if ( pJoyDriver->GetBButtonPressed() )
+	{
+		pGripper->PulseIntake( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+	}
+
+	// +++++++ MUST CALL EVERY UPDATE ++++++
+	pGripper->UpdateState();
 
 	return;
 }
