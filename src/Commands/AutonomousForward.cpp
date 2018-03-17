@@ -60,10 +60,15 @@ void AutonomousForward::Execute()
 //	::SmartDashboard::PutString("Y+A = Select Talon", "Right Joy for +ve, -ve power");
 
 
-//	const double DRIVE_FORWARD_SPEED = 0.25;
-//	const double DRIVE_FORWARD_TIME = 4.0;
+	CommandBase::pDriveTrain->ArcadeDrive( this->m_speed, 0.0 );
 
 
+	return;
+}
+
+
+bool AutonomousForward::IsFinished()
+{
 	double timeElapsed = this->pTimer->Get();
 
 	{
@@ -72,17 +77,11 @@ void AutonomousForward::Execute()
 		std::cout << "AutonomousForward(): " << timeLeft << " seconds to go" << std::endl;
 	}
 
-	if ( timeElapsed < this->m_secondsToRun )
+	if ( timeElapsed > this->m_secondsToRun )
 	{
-		CommandBase::pDriveTrain->ArcadeDrive( this->m_speed, 0.0 );
+		return true;
 	}
 
-	return;
-}
-
-
-bool AutonomousForward::IsFinished()
-{
 	return false;
 }
 
