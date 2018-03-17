@@ -24,9 +24,9 @@ public:
 
 	void InitDefaultCommand() override;
 
-	void Open(void); //Madi- The motor will open the forks
+	void OpenCompletely(void); //Madi- The motor will open the forks
 
-	void Close(void); //Madi - The motor will close the forks
+	void CloseCompletely(void); //Madi - The motor will close the forks
 
 
 	void SetIntakeSpeed(double speed);

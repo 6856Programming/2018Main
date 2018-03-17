@@ -15,7 +15,8 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 
 	this->m_pLiftMotor = new can::WPI_TalonSRX(LIFTER_MOTOR_ID);
 
-	this->m_pContactSwitch = new frc::DigitalInput(LIFT_MAST_CONTACT_SWITCH);
+	this->m_pLimitSwitchTop = new frc::DigitalInput(LIFT_MAST_UPPER_CONTACT_SWITCH);
+	this->m_pLimitSwitchBottom = new frc::DigitalInput(LIFT_MAST_LOWER_CONTACT_SWITCH);
 
 	return;
 }

@@ -54,7 +54,7 @@ void Gripper::InitDefaultCommand()
 	return;
 }
 
-void Gripper::Open(void) //Solenoid is OFF, cylinder is in retracted position
+void Gripper::OpenCompletely(void) //Solenoid is OFF, cylinder is in retracted position
 {
 	std::cout << "Gripper::Open()" << std::endl;
 
@@ -63,7 +63,7 @@ void Gripper::Open(void) //Solenoid is OFF, cylinder is in retracted position
 	return;
 }
 
-void Gripper::Close(void) //Solenoid is ON, cylinder is in extended position
+void Gripper::CloseCompletely(void) //Solenoid is ON, cylinder is in extended position
 {
 	std::cout << "Gripper::Close()" << std::endl;
 
