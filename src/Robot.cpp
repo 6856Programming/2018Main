@@ -1,6 +1,7 @@
 #include "Robot.h"
 
 #include "Commands/AutonomousForward.h"
+#include "Commands/AutonomousGripper.h"
 
 /**
  *
@@ -80,6 +81,8 @@ void Robot::AutonomousInit()
 //	}
 
 	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 5.0 /*seconds*/, 0.5 ) );
+	// TODO: Add command for mast raise
+	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_OPEN ) );
 
 	return;
 }

@@ -2,122 +2,82 @@
 #include "../RobotMap.h"
 #include <iostream>
 
-//THIS CODE IS NOT COMPLETE --- SPECIFICLY THE EXECUTE CAN NOT DIFFERENTIATE BETWEEN OPEN AND CLOSE. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//Super easy to fix, I just have to make separate commands. Will only take about an hour max to fix.
-
-void AutonomousGripper::AutonomousOpenGripper(double seconds) //This used to have speed but in ClawOpen() they just use the max speed anyways
+AutonomousGripper::AutonomousGripper(eGripperState openOrClose) //'o' = open or 'c' = closed
 {
-	std::cout << "[AutonomousGripper] Constructed" << std::endl;
+    std::cout << "[AutonomousGripper] Constructed" << std::endl;
 
-	if (CommandBase::pGripper != nullptr)
-	{
-		Requires(CommandBase::pGripper);
-	}
-	else
-	{
-		std::cout << "[AutonomousGripper] gripper is null!" << std::endl;
-	}
+    if (CommandBase::pGripper != nullptr)
+    {
+       Requires(CommandBase::pGripper);
+    }
+    else
+    {
+       std::cout << "[AutonomousGripper] gripper is null!" << std::endl;
+    }
+    this->m_openOrClose = openOrClose;
 
-	this->pTimer = new frc::Timer();
-
-	this->m_secondsToRun = seconds;
-
-	return;
+    return;
 }
 
-
-void AutonomousGripper::AutonomousOpenGripper()
+AutonomousGripper::AutonomousGripper()
 {
-	this->m_secondsToRun = 0.0;
-	return;
+    this->m_openOrClose = AutonomousGripper::GRIPPER_ERROR_OR_UNKNOWN;	// 'e'; //e for error
+    //We shouldn't leave this blank just incase of that 1-in-a-million chance it declares as 'o' or 'p'
+
+    return;
 }
-
-void AutonomousGripper::AutonomousCloseGripper(double seconds) //This used to have speed but in ClawOpen() they just use the max speed anyways
-{
-	std::cout << "[AutonomousGripper] Constructed" << std::endl;
-
-	if (CommandBase::pGripper != nullptr)
-	{
-		Requires(CommandBase::pGripper);
-	}
-	else
-	{
-		std::cout << "[AutonomousGripper] gripper is null!" << std::endl;
-	}
-
-	this->pTimer = new frc::Timer();
-
-	this->m_secondsToRun = seconds;
-
-	return;
-}
-
-void AutonomousGripper::AutonomousCloseGripper()
-{
-	this->m_secondsToRun = 0.0;
-	return;
-}
-
 
 void AutonomousGripper::Initialize()
 {
-	std::cout << "[AutonomousForward] Initialized" << std::endl;
+    std::cout << "[AutonomousForward] Initialized" << std::endl;
 
-	this->pTimer->Reset();
-	this->pTimer->Start();
-
-	return;
+    return;
 }
-
-
-
 
 void AutonomousGripper::Execute()
 {
 
-//ThinkThisDoTheSameThing
-//	CommandBase::pGripper->Open();
+    if (this->m_openOrClose == 'o')
+    {
+       std::cout << "[AutonomousForward] Opening Grippers" << std::endl;
+       CommandBase::pGripper->OpenCompletely();
+    }
 
-//The only thing is that in the ClawOpen() has the code right after... This is it
-	/*
-	if ( this->m_pClawOffTimer->Get() >= GRIPPER_CLAW_SHUT_OFF_TIME )
-		{
-			std::cout << "Gripper: Claw timer timeout - turning off claw" << std::endl;
-			this->m_pClawOffTimer->Stop();
-			CommandBase::pGripper->ClawStop();
-		}
-*/
-
+    else if (this->m_openOrClose == 'c')
+    {
+       std::cout << "[AutonomousForward] Closing Grippers" << std::endl;
+       CommandBase::pGripper->CloseCompletely();
+    }
+    return;
 }
-
 
 bool AutonomousGripper::IsFinished()
 {
-	double timeElapsed = this->pTimer->Get();
-
+	if ( this->m_openOrClose == AutonomousGripper::GRIPPER_OPEN )
 	{
-		double timeLeft = this->m_secondsToRun - timeElapsed;
-
-		std::cout << "AutonomousForward(): " << timeLeft << " seconds to go" << std::endl;
-	}
-
-	if ( timeElapsed > this->m_secondsToRun )
-	{
-		return true;
-	}
-
-	return false;
+       return true;
+    }
+    else if (this->m_openOrClose == AutonomousGripper::GRIPPER_CLOSED)
+    {
+       return true;
+    }
+    else
+    {
+    	this->m_openOrClose = AutonomousGripper::GRIPPER_ERROR_OR_UNKNOWN;
+       std::cout << "[AutonomouseGripper] Failed to construct properly. Pass through 'o' or 'c'." << std::endl;
+       return true;
+    }
+    return false;
 }
-
 
 void AutonomousGripper::End()
 {
-	return;
+    std::cout << "[AutonomousGripper] Ended." << std::endl;
+    return;
 }
-
 
 void AutonomousGripper::Interrupted()
 {
-	return;
+    std::cout << "[AutonomousGripper] was Interrupted." << std::endl;
+    return;
 }
-

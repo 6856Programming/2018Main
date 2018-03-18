@@ -1,44 +1,32 @@
-/*
- * AutonomousGripper.h
- *
- *  Created on: Mar 13, 2018
- *      Author: Robotics
- */
-
 #ifndef SRC_COMMANDS_AUTONOMOUSGRIPPER_H_
 #define SRC_COMMANDS_AUTONOMOUSGRIPPER_H_
 
 #include <iostream>
 #include <WPILib.h>
 #include "../CommandBase.h"
-#include "MyAutoCommand.h" //Do we need this?
-
-/**
- *
- */
+#include "MyAutoCommand.h"
 
 class AutonomousGripper: public CommandBase
 {
 public:
-	void AutonomousOpenGripper(double seconds);
-	void AutonomousCloseGripper(double seconds);
-	void Initialize() override;
-	void Execute() override;
-	bool IsFinished() override;
-	void End() override;
-	void Interrupted() override;
+	enum eGripperState
+	{
+	 GRIPPER_OPEN = 'o',
+	 GRIPPER_CLOSED = 'c',
+	 GRIPPER_ERROR_OR_UNKNOWN = 'e'
+	};
 
-
+    //AutonomousGripper(char openOrClose);
+    AutonomousGripper(eGripperState openOrClose);
+    void Initialize() override;
+    void Execute() override;
+    bool IsFinished() override;
+    void End() override;
+    void Interrupted() override;
 private:
-
-	double m_secondsToRun;
-
-	void AutonomousOpenGripper();
-	void AutonomousCloseGripper();
-	frc::Timer* pTimer;
-
+    //char m_openOrClose; //'o' = open .... 'c' = close
+    eGripperState m_openOrClose;
+    AutonomousGripper();
 };
-
-
 
 #endif /* SRC_COMMANDS_AUTONOMOUSGRIPPER_H_ */
