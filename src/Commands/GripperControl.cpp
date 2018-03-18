@@ -41,37 +41,73 @@ void GripperControl::Execute()
 //	::SmartDashboard::PutNumber("Selected TalonID:", this->m_selectedTalonID);
 //	::SmartDashboard::PutString("Y+A = Select Talon", "Right Joy for +ve, -ve power");
 
-	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+
+	Gripper* pGripper = ::CommandBase::pGripper;
+
+
+// For DRIVER xbox controller, was A - intake in, B - intake out
+//	if ( pJoyDriver->GetAButtonPressed() )
+//	{
+//		pGripper->PulseIntake( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+//	}
+//	else if ( pJoyDriver->GetBButtonPressed() )
+//	{
+//		pGripper->PulseIntake( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+//	}
+//
+//
+//	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+//
+//	// Gripper control:
+//	// Push ONCE to do FULL close
+//	// (i.e. They DON'T have to hold the button to move the claw)
+//
+//	if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kLeftHand) )
+//	{
+//		std::cout << "GripperControl::Open() called..." << std::endl;
+//		CommandBase::pGripper->OpenCompletely();
+//	}
+//	else if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kRightHand) )
+//	{
+//		std::cout << "GripperControl::Close() called..." << std::endl;
+//		CommandBase::pGripper->CloseCompletely();
+//	}
+
+
+
+// For OPERATOR joystick control:
+// - trigger (button 1) = shoot out, "top" button (button 2) (lower thumb button) = intake
+
+	frc::Joystick* pJoyOperator = ::CommandBase::pOI->GetJoystickOperator();
+
+	if ( pJoyOperator->GetTriggerPressed() )
+	{
+		pGripper->PulseIntake( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+	}
+	else if ( pJoyOperator->GetTopPressed() )
+	{
+		pGripper->PulseIntake( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+	}
+
+// For OPERATOR joystick control:
+// - left top (button 4) = open claw, right top (button 5) = close claw
 
 	// Gripper control:
 	// Push ONCE to do FULL close
 	// (i.e. They DON'T have to hold the button to move the claw)
 
-	if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kLeftHand) )
-	{
-		std::cout << "GripperControl::Open() called..." << std::endl;
-		CommandBase::pGripper->OpenCompletely();
-	}
-	else if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kRightHand) )
-	{
-		std::cout << "GripperControl::Close() called..." << std::endl;
-		CommandBase::pGripper->CloseCompletely();
-	}
+		if ( pJoyOperator->GetRawButtonPressed(4) )
+		{
+			std::cout << "GripperControl::Open() called..." << std::endl;
+			CommandBase::pGripper->OpenCompletely();
+		}
+		else if ( pJoyOperator->GetRawButtonPressed(3) )
+		{
+			std::cout << "GripperControl::Close() called..." << std::endl;
+			CommandBase::pGripper->CloseCompletely();
+		}
 
 
-//	NOW: A - intake in, B - intake out
-
-
-	Gripper* pGripper = ::CommandBase::pGripper;
-
-	if ( pJoyDriver->GetAButtonPressed() )
-	{
-		pGripper->PulseIntake( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
-	}
-	else if ( pJoyDriver->GetBButtonPressed() )
-	{
-		pGripper->PulseIntake( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
-	}
 
 	// +++++++ MUST CALL EVERY UPDATE ++++++
 	pGripper->UpdateState();

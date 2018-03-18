@@ -40,15 +40,24 @@ void LiftControl::Execute()
 //	::SmartDashboard::PutNumber("Selected TalonID:", this->m_selectedTalonID);
 //	::SmartDashboard::PutString("Y+A = Select Talon", "Right Joy for +ve, -ve power");
 
-	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+// **********************************
+// Now the operator is using the Joystick (not the xbox controller
+// **********************************
+//	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+//	double trigLeft = pJoyDriver->GetTriggerAxis(frc::GenericHID::kLeftHand);
+//	double trigRight = pJoyDriver->GetTriggerAxis(frc::GenericHID::kRightHand);
+//	double liftSpeedAndDirection = (trigRight - trigLeft) * LIFT_MAST_SPEED_RATIO;
+//	CommandBase::pLiftMast->DEBUG_SetMotorSpeed(liftSpeedAndDirection);
+// **********************************
 
-	double trigLeft = pJoyDriver->GetTriggerAxis(frc::GenericHID::kLeftHand);
-	double trigRight = pJoyDriver->GetTriggerAxis(frc::GenericHID::kRightHand);
+	frc::Joystick* pJoyOperator = CommandBase::pOI->GetJoystickOperator();
 
-	double liftSpeedAndDirection = (trigRight - trigLeft) * LIFT_MAST_SPEED_RATIO;
+	double liftSpeedAndDirection = pJoyOperator->GetY();		// is "right" hand, even though there is only 1 joystick
 
-
-	CommandBase::pLiftMast->DEBUG_SetMotorSpeed(liftSpeedAndDirection);
+	if ( fabs(liftSpeedAndDirection) < JOYSTICK_DEADZONE )
+	{
+		liftSpeedAndDirection = 0.0;
+	}
 
 	::SmartDashboard::PutNumber("LiftControl LiftSpeed:", liftSpeedAndDirection);
 

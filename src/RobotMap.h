@@ -45,6 +45,7 @@ const int XBOX_CONTROLLER_OPERATOR_PORT = 1;
 //controller deadzone
 const double XBOX_DEADZONE_LEFT_JOY=0.05;
 const double XBOX_DEADZONE_RIGHT_JOY=0.05;
+const double JOYSTICK_DEADZONE = 0.05;
 
 const double DRIVE_SLOW_SPEED_RATIO = 0.6;
 
