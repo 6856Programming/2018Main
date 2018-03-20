@@ -1,26 +1,38 @@
 General notes:
 
-Intake motors (rubber forked wheels):
-- A = "pulse" intake in  (currently 1 second)
-- B = "pulse" intake out (currently 1 second)
-
-Right joystick:
+Right Xbox controller:
 - Y axis: forward-reverse speed
 - X axis: turn
 - Button (push joystick in): "Fast" speed
 
+Operator (actual) joystick
+- Y axis forward - mast up
+- Y axis backward - mast down
 
-Right trigger: mast up
-Left trigger:  mast down
+- Trigger: Intake ("forked" wheels) in 
+- Top thumb button: Intake out 
 
-Right bumper: claw close
-Right bumper: claw open
+- Top left (#3) button: Gripper "claw" open completely
+- Top middle (#4) button: Gripper "claw" close completely 
+
 
 NOTE: 
 - Claw will stop with limit switches
   (Will stop with EITHER switch pressed)
 - Claw motor will stop after X seconds, not matter what (currently 2 seconds)
   (Can restart, but this is to prevent damage if limit switches fail/are messed up)
-
   
+  
+********************************************************
+ The old controls (when there was a single, driver xbox controller): 
+Right trigger: mast up
+Left trigger:  mast down
+
+Right bumper: claw close
+Right bumper: claw open
+
+Intake motors (rubber forked wheels):
+- A = "pulse" intake in  (currently 1 second)
+- B = "pulse" intake out (currently 1 second)
+
   
