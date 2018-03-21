@@ -82,6 +82,28 @@ void DriveWithJoystick::Execute()
 
 	CommandBase::pDriveTrain->ArcadeDrive( forwardSpeed, turnAngle );
 
+	// Display the encoder positions of the left and right motor
+	double leftEncoder = 0.0;
+	double rightEncoder = 0.0;
+
+	::CommandBase::pDriveTrain->getEncoderPosition( leftEncoder, rightEncoder );
+
+	::SmartDashboard::PutNumber("Left Encoder", leftEncoder);
+	::SmartDashboard::PutNumber("Right Encoder", rightEncoder);
+
+	// In case the encoders are connected to the wrong Talons...
+	DriveTrain* pDT = ::CommandBase::pDriveTrain;
+
+	::SmartDashboard::PutNumber( "DEBUG: LeftFront Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::LEFT_FRONT) );
+	::SmartDashboard::PutNumber( "DEBUG: RightFront Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::RIGHT_FRONT) );
+	::SmartDashboard::PutNumber( "DEBUG: LeftRear Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::LEFT_REAR) );
+	::SmartDashboard::PutNumber( "DEBUG: RightRear Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::RIGHT_REAR) );
+
+	::SmartDashboard::PutNumber( "DEBUG: LeftFront Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::LEFT_FRONT) );
+	::SmartDashboard::PutNumber( "DEBUG: RightFront Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_FRONT) );
+	::SmartDashboard::PutNumber( "DEBUG: LeftRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::LEFT_REAR) );
+	::SmartDashboard::PutNumber( "DEBUG: RightRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_REAR) );
+
 	return;
 }
 

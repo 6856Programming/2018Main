@@ -35,6 +35,17 @@ public:
 
 	void resetEncoder(bool bLeft, bool bRight);
 
+	enum eMotorID
+	{
+		LEFT_FRONT,
+		LEFT_REAR,
+		RIGHT_FRONT,
+		RIGHT_REAR
+	};
+	// This is used to get the information directly from the motor
+	double DEBUG_getEncoderPositionFromMotorID( eMotorID motorID );
+	double DEBUG_getEncoderVelocityFromMotorID( eMotorID motorID );
+
 private:
 	can::WPI_TalonSRX* pLeftFrontMotor;
 	can::WPI_TalonSRX* pLeftRearMotor;

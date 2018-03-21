@@ -148,3 +148,55 @@ void DriveTrain::resetEncoder(bool bLeft, bool bRight)
 	}
 	return;
 }
+
+enum eMotorID
+{
+	LEFT_FRONT,
+	LEFT_REAR,
+	RIGHT_FRONT,
+	RIGHT_REAR
+};
+// This is used to get the information directly from the motor
+double DriveTrain::DEBUG_getEncoderPositionFromMotorID( eMotorID motorID )
+{
+	switch ( motorID )
+	{
+	case DriveTrain::LEFT_FRONT:
+		return this->pLeftFrontMotor->GetSelectedSensorPosition(0);
+		break;
+	case DriveTrain::LEFT_REAR:
+		return this->pLeftRearMotor->GetSelectedSensorPosition(0);
+		break;
+	case DriveTrain::RIGHT_FRONT:
+		return this->pRightFrontMotor->GetSelectedSensorPosition(0);
+		break;
+	case DriveTrain::RIGHT_REAR:
+		return this->pRightRearMotor->GetSelectedSensorPosition(0);
+		break;
+	}
+
+	return 0.0;
+}
+
+double DriveTrain::DEBUG_getEncoderVelocityFromMotorID( eMotorID motorID )
+{
+	switch ( motorID )
+	{
+	case DriveTrain::LEFT_FRONT:
+		return this->pLeftFrontMotor->GetSelectedSensorVelocity(0);
+		break;
+	case DriveTrain::LEFT_REAR:
+		return this->pLeftRearMotor->GetSelectedSensorVelocity(0);
+		break;
+	case DriveTrain::RIGHT_FRONT:
+		return this->pRightFrontMotor->GetSelectedSensorVelocity(0);
+		break;
+	case DriveTrain::RIGHT_REAR:
+		return this->pRightRearMotor->GetSelectedSensorVelocity(0);
+		break;
+	}
+
+	return 0.0;
+}
+
+
