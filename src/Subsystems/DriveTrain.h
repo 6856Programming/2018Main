@@ -30,6 +30,10 @@ public:
 
 	void Reset();
 
+	void getEncoderPosition(double &leftEncoder, double &rightEncoder);
+	void getEncoderVelocity(double &leftEncoder, double &rightEncoder);
+
+	void resetEncoder(bool bLeft, bool bRight);
 
 private:
 	can::WPI_TalonSRX* pLeftFrontMotor;

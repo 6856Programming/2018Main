@@ -25,7 +25,7 @@ const double GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME = 2.0;
 // Now long the "pulse" of the "pulsed mode" of the intake lasts (in seconds)
 const double GRIPPER_INTAKE_PULSED_RUN_TIME = 1.0;
 // Now fast the intake motors go when in pulsed mode
-const double GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED = 0.5;
+const double GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED = 0.51;
 
 // The maximum speed the claw can move
 const double CLAW_MOVEMENT_SPEED_MAX = 0.3;

@@ -36,7 +36,7 @@ public:
 	void PulseIntake(double speed, double time);
 
 	bool isClawOpenLimitSwitchPushed(void);
-	bool isClawClosedLimitSwitchPused(void);
+	bool isClawClosedLimitSwitchPushed(void);
 	bool areEitherClawLimitSwitchesPushed(void);
 
 

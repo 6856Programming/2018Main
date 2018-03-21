@@ -39,7 +39,7 @@ bool Gripper::isClawOpenLimitSwitchPushed(void)
 	return ( ! this->m_pClawOpenLimitSwitch->Get() );
 }
 
-bool Gripper::isClawClosedLimitSwitchPused(void)
+bool Gripper::isClawClosedLimitSwitchPushed(void)
 {
 	// Are NO, so invert this
 	return ( ! this->m_pClawClosedLimitSwitch->Get() );
@@ -47,7 +47,7 @@ bool Gripper::isClawClosedLimitSwitchPused(void)
 
 bool Gripper::areEitherClawLimitSwitchesPushed(void)
 {
-	return ( this->isClawOpenLimitSwitchPushed() || this->isClawClosedLimitSwitchPused() );
+	return ( this->isClawOpenLimitSwitchPushed() || this->isClawClosedLimitSwitchPushed() );
 }
 
 
@@ -107,7 +107,7 @@ void Gripper::CloseCompletely(void) //Solenoid is ON, cylinder is in extended po
 	//this->m_pGripperSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 
 	// Is the claw fully closed, already?
-	if ( ! this->isClawClosedLimitSwitchPused() )
+	if ( ! this->isClawClosedLimitSwitchPushed() )
 	{
 		// If the claw is idle now, reset the watchdog timer
 		// (but if it's NOT idle, then the claw is ALREADY moving,
@@ -154,7 +154,7 @@ void Gripper::PulseIntake(double speed, double time)
 void Gripper::UpdateState(void)
 {
 	::SmartDashboard::PutBoolean( "Gripper Open Limit", this->isClawOpenLimitSwitchPushed() );
-	::SmartDashboard::PutBoolean( "Gripper Closed Limit",this->isClawClosedLimitSwitchPused() );
+	::SmartDashboard::PutBoolean( "Gripper Closed Limit",this->isClawClosedLimitSwitchPushed() );
 
 	// Are we in "Pulsed Intake" mode?
 	if ( this->m_bPulsedIntakeModeOn )
@@ -228,6 +228,9 @@ void Gripper::UpdateState(void)
 		// The motor has been running too long, so shut it off!
 		this->m_pClawMotor->Set(0.0);
 		this->m_CurrentClawState = Gripper::IS_IDLE;
+
+		std::cout << "WARNING: Claw watchdog timer fired! Claw was running for more than "
+				<< GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME << " seconds." << std::endl;
 	}
 
 

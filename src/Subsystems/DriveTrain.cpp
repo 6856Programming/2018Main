@@ -120,15 +120,31 @@ void DriveTrain::Reset()
 	return;
 }
 
+void DriveTrain::getEncoderPosition(double &leftEncoder, double &rightEncoder)
+{
+	leftEncoder = this->pLeftFrontMotor->GetSelectedSensorPosition(0);
+	rightEncoder = this->pRightFrontMotor->GetSelectedSensorPosition(0);
+	return;
+}
 
+void DriveTrain::getEncoderVelocity(double &leftEncoder, double &rightEncoder)
+{
+	leftEncoder = this->pLeftFrontMotor->GetSelectedSensorVelocity(0);
+	rightEncoder = this->pRightFrontMotor->GetSelectedSensorVelocity(0);
+	return;
+}
 
-
-
-
-
-
-
-
-
-
-
+void DriveTrain::resetEncoder(bool bLeft, bool bRight)
+{
+	const int PID_LOOP_INDEX = 0;
+	const int TIMEOUT_MS = 10;
+	if (bLeft)
+	{
+		this->pLeftFrontMotor->SetSelectedSensorPosition(0, PID_LOOP_INDEX, TIMEOUT_MS);
+	}
+	if (bRight)
+	{
+		this->pRightFrontMotor->SetSelectedSensorPosition(0, PID_LOOP_INDEX, TIMEOUT_MS);
+	}
+	return;
+}
