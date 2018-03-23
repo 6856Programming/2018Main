@@ -61,7 +61,7 @@ void LiftControl::Execute()
 
 	::SmartDashboard::PutNumber("LiftControl LiftSpeed:", liftSpeedAndDirection);
 
-
+	::CommandBase::pLiftMast->DEBUG_SetMotorSpeed(liftSpeedAndDirection);
 
 	return;
 }
