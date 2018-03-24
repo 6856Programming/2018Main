@@ -1,3 +1,4 @@
+#include <Commands/Waiter.h>
 #include "Robot.h"
 
 #include "Commands/AutonomousForward.h"
@@ -80,9 +81,10 @@ void Robot::AutonomousInit()
 //		std::cout << "Autonomous Command is null!" << std::endl;
 //	}
 
-	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 5.0 /*seconds*/, 0.5 ) );
+	//::Scheduler::GetInstance()->AddCommand( new WaitCommand(5.0));
+	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 4.0 , 0.6 , AUTO_WAIT_TIME) );
 	// TODO: Add command for mast raise
-	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_OPEN ) );
+	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_CLOSED ) );
 
 	return;
 }

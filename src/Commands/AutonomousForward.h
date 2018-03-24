@@ -20,7 +20,7 @@
 class AutonomousForward: public CommandBase
 {
 public:
-	AutonomousForward(double seconds, double speed);
+	AutonomousForward(double seconds, double speed, double wait);
 	void Initialize() override;
 	void Execute() override;
 	bool IsFinished() override;
@@ -31,10 +31,12 @@ public:
 private:
 
 	double m_secondsToRun;
+	double m_secondsToWait;
 	double m_speed;
 
 	AutonomousForward();
 	frc::Timer* pTimer;
+	frc::Timer* pTimer2;
 //	class DriveTrain *myDrive;
 //	drive = Driv(1,3)
 };

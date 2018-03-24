@@ -13,13 +13,17 @@ Gripper::Gripper() : frc::Subsystem("Gripper")
 	this->m_pRightIntakeMotor = new can::WPI_TalonSRX(GRIPPER_INTAKE_RIGHT_MOTOR_ID);
 
 	this->m_pClawMotor = new can::WPI_TalonSRX(GRIPPER_CLAW_MOTOR_ID);
+	// Motor runs the "other" way
+	this->m_pClawMotor->SetInverted(true);
 
 	this->m_pClawOpenLimitSwitch = new frc::DigitalInput(GRIPPER_CLAW_LIMIT_OPEN_DIO_ID);		// On Rio PID pins, number 0 to ??
 	this->m_pClawClosedLimitSwitch = new frc::DigitalInput(GRIPPER_CLAW_LIMIT_CLOSED_DIO_ID);
 
-	this->m_pClawMotorWatchDogTimer = new frc::Timer();
+//	this->m_pClawMotorWatchDogTimer = new frc::Timer();
 
 	this->m_pPulsedIntakeCountdownTimer = new frc::Timer();
+
+	this->m_pOpenClawShutOffTimer = new frc::Timer();
 
 	this->m_PulsedIntakeSpeed = 0.0;
 	this->m_PulsedIntakePulseTimeInSeconds = 0.0;
@@ -58,7 +62,7 @@ Gripper::~Gripper()
 	delete this->m_pPulsedIntakeCountdownTimer;
 
 	delete this->m_pClawMotor;
-	delete this->m_pClawMotorWatchDogTimer;
+//	delete this->m_pClawMotorWatchDogTimer;
 	delete this->m_pClawOpenLimitSwitch;
 	delete this->m_pClawClosedLimitSwitch;
 
@@ -74,28 +78,34 @@ void Gripper::InitDefaultCommand()
 	return;
 }
 
-void Gripper::OpenCompletely(void) //Solenoid is OFF, cylinder is in retracted position
+void Gripper::OpenCompletely(bool bAndShoot) //Solenoid is OFF, cylinder is in retracted position
 {
 	std::cout << "Gripper::Open()" << std::endl;
 
-	//this->m_pGripperSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 
-	// Is the claw already fully open, already?
-	if ( ! this->isClawOpenLimitSwitchPushed() )
+	// Is the claw already opening?
+	if ( ( this->m_CurrentClawState == Gripper::IS_OPENNING ) ||
+	     ( this->m_CurrentClawState == Gripper::IS_OPENNING_AND_SHOOTING ))
 	{
-		// If the claw is idle now, reset the watchdog timer
-		// (but if it's NOT idle, then the claw is ALREADY moving,
-		//  so we DON'T want to reset it, as it's supposed to keep
-		//  track of how long the motor has continuously run)
-		if ( this->m_CurrentClawState == Gripper::IS_IDLE )
-		{
-			this->m_pClawMotorWatchDogTimer->Reset();
-			this->m_pClawMotorWatchDogTimer->Start();
-		}
-
-		this->m_ClawMovementSpeed = CLAW_MOVEMENT_SPEED_MAX;
-		this->m_CurrentClawState = Gripper::IS_OPENNING;
+		// We are already opening
+		return;
 	}
+
+	if ( bAndShoot )
+	{
+		this->m_CurrentClawState = Gripper::IS_OPENNING_AND_SHOOTING;
+		this->m_ClawMovementSpeed = CLAW_OPEN_AND_SHOOT_SPEED;
+	}
+	else
+	{
+		this->m_CurrentClawState = Gripper::IS_OPENNING;
+		this->m_ClawMovementSpeed = CLAW_OPEN_SPEED;
+	}
+
+	// Start timer for open
+	this->m_pOpenClawShutOffTimer->Reset();
+	this->m_pOpenClawShutOffTimer->Start();
+
 
 	return;
 }
@@ -104,28 +114,24 @@ void Gripper::CloseCompletely(void) //Solenoid is ON, cylinder is in extended po
 {
 	std::cout << "Gripper::Close()" << std::endl;
 
-	//this->m_pGripperSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 
-	// Is the claw fully closed, already?
-	if ( ! this->isClawClosedLimitSwitchPushed() )
-	{
-		// If the claw is idle now, reset the watchdog timer
-		// (but if it's NOT idle, then the claw is ALREADY moving,
-		//  so we DON'T want to reset it, as it's supposed to keep
-		//  track of how long the motor has continuously run)
-		if ( this->m_CurrentClawState == Gripper::IS_IDLE )
-		{
-			this->m_pClawMotorWatchDogTimer->Reset();
-			this->m_pClawMotorWatchDogTimer->Start();
-		}
+	this->m_ClawMovementSpeed = CLAW_CLOSE_SPEED;
 
-		this->m_ClawMovementSpeed = CLAW_MOVEMENT_SPEED_MAX;
-		this->m_CurrentClawState = Gripper::IS_CLOSING;
-	}
+	this->m_CurrentClawState = Gripper::IS_CLOSING;
 
 	return;
 }
 
+//NEW CODE
+void Gripper::Idle(void)
+{
+	std::cout << "Gripper::Idle()" << std::endl;
+
+	this->m_pClawMotor->Set(0.0);
+	this->m_CurrentClawState = Gripper::IS_IDLE;
+
+	return;
+}
 void Gripper::SetIntakeSpeed(double speed)
 {
 	this->m_pLeftIntakeMotor->Set(speed);
@@ -134,7 +140,7 @@ void Gripper::SetIntakeSpeed(double speed)
 }
 
 // This will run the intake for the desired speed.
-// Each time it's called, the timer resets.
+// Each time it's called, the timer resets.ccc
 void Gripper::PulseIntake(double speed, double time)
 {
 	// Reset the timer & save the speed of the intake
@@ -187,10 +193,36 @@ void Gripper::UpdateState(void)
 		::SmartDashboard::PutString("Claw state", "IS_IDLE");
 		this->m_pClawMotor->Set(0.0);
 		break;
+
+	case Gripper::IS_OPENNING_AND_SHOOTING:
+		::SmartDashboard::PutString("Claw state", "IS_OPENNING_AND_SHOOTING");
+
+		// Has the gripper been closing for 1.5 (or whatever) seconds?
+		if ( this->m_pOpenClawShutOffTimer->Get() < CLAW_OPEN_SHUT_OFF_TIME )
+		{
+			// Claw is opening
+			this->m_pClawMotor->Set(this->m_ClawMovementSpeed);
+
+			// Also, "shoot"
+			this->PulseIntake( -GRIPPER_SHOOT_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
+		}
+		else
+		{
+			// Claw is fully opened, so stop
+			this->m_pOpenClawShutOffTimer->Stop();
+			this->m_pClawMotor->Set(0.0);
+			this->m_CurrentClawState = Gripper::IS_IDLE;
+		}// if ( this->getGripperOpenLimitSwitchStatus() )
+
+
+
+		break;
+
 	case Gripper::IS_OPENNING:
 		::SmartDashboard::PutString("Claw state", "IS_OPENNING");
 
-		if ( ! this->areEitherClawLimitSwitchesPushed() )
+		// Has the gripper been closing for 1.5 (or whatever) seconds?
+		if ( this->m_pOpenClawShutOffTimer->Get() < CLAW_OPEN_SHUT_OFF_TIME )
 		{
 			// Claw is opening
 			this->m_pClawMotor->Set(this->m_ClawMovementSpeed);
@@ -198,6 +230,7 @@ void Gripper::UpdateState(void)
 		else
 		{
 			// Claw is fully opened, so stop
+			this->m_pOpenClawShutOffTimer->Stop();
 			this->m_pClawMotor->Set(0.0);
 			this->m_CurrentClawState = Gripper::IS_IDLE;
 		}// if ( this->getGripperOpenLimitSwitchStatus() )
@@ -222,7 +255,7 @@ void Gripper::UpdateState(void)
 		break;
 	}
 
-	// Has the claw motor been running too long?
+	/* Has the claw motor been running too long?
 	if ( this->m_pClawMotorWatchDogTimer->Get() >= GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME )
 	{
 		// The motor has been running too long, so shut it off!
@@ -231,8 +264,9 @@ void Gripper::UpdateState(void)
 
 		std::cout << "WARNING: Claw watchdog timer fired! Claw was running for more than "
 				<< GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME << " seconds." << std::endl;
-	}
 
+	}
+	*/
 
 	return;
 }

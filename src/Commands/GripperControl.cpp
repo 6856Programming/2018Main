@@ -96,17 +96,33 @@ void GripperControl::Execute()
 	// Push ONCE to do FULL close
 	// (i.e. They DON'T have to hold the button to move the claw)
 
-		if ( pJoyOperator->GetRawButtonPressed(4) )
+		if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_OPEN_BUTTON_ID) )
 		{
 			std::cout << "GripperControl::Open() called..." << std::endl;
-			CommandBase::pGripper->OpenCompletely();
+			CommandBase::pGripper->OpenCompletely(false);
 		}
-		else if ( pJoyOperator->GetRawButtonPressed(3) )
+		else if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_IDLE_BUTTON_ID) )
+		{
+			std::cout << "GripperControl::Idle()..." << std::endl;
+			pGripper->Idle();
+		}
+
+/*		else if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_OPEN_AND_SHOOT_BUTTON_ID) )
+		{
+			std::cout << "GripperControl::OpenAndShoot()..." << std::endl;
+			pGripper->OpenCompletely(true);
+		}
+*/
+		else if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_CLOSE_BUTTON_ID) )
 		{
 			std::cout << "GripperControl::Close() called..." << std::endl;
 			CommandBase::pGripper->CloseCompletely();
 		}
-
+//		else if ( pJoyOperator->GetRawButtonPressed(3) )
+//		{
+//			std::cout << "GripperControl::Idle() called..." << std::endl;
+//			CommandBase::pGripper->Idle();
+//		}
 
 
 	// +++++++ MUST CALL EVERY UPDATE ++++++

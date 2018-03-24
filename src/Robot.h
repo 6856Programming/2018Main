@@ -5,6 +5,7 @@
 #include <WPILib.h>
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
+#include <Commands/WaitCommand.h>
 #include "Commands/DriveWithJoystick.h"
 #include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"

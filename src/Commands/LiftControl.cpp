@@ -54,6 +54,8 @@ void LiftControl::Execute()
 
 	double liftSpeedAndDirection = pJoyOperator->GetY();		// is "right" hand, even though there is only 1 joystick
 
+	liftSpeedAndDirection *= -1;
+
 	if ( fabs(liftSpeedAndDirection) < JOYSTICK_DEADZONE )
 	{
 		liftSpeedAndDirection = 0.0;

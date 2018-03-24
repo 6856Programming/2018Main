@@ -40,7 +40,7 @@ void AutonomousGripper::Execute()
     if (this->m_openOrClose == 'o')
     {
        std::cout << "[AutonomousForward] Opening Grippers" << std::endl;
-       CommandBase::pGripper->OpenCompletely();
+       CommandBase::pGripper->OpenCompletely(false);
     }
 
     else if (this->m_openOrClose == 'c')

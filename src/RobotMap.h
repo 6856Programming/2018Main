@@ -20,15 +20,30 @@ const int GRIPPER_CLAW_LIMIT_CLOSED_DIO_ID = 1;
 // This is how long the gripper claw can move before it's turned off.
 // This is just in case the switches are not working, or there is something
 //  jamming the gripper claw - so the motor won't run when jammed.
-const double GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME = 2.0;
+//const double GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME = 0.5;
 
+// Set how long the auton wait is in seconds
+const double AUTO_WAIT_TIME = 0.0;
 // Now long the "pulse" of the "pulsed mode" of the intake lasts (in seconds)
 const double GRIPPER_INTAKE_PULSED_RUN_TIME = 1.0;
 // Now fast the intake motors go when in pulsed mode
-const double GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED = 0.51;
+const double GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED = 0.90;
+// How fast the intake motors spin when shooting
+const double GRIPPER_SHOOT_PLUSED_MODE_MOTOR_SPEED = 0.80;
 
 // The maximum speed the claw can move
-const double CLAW_MOVEMENT_SPEED_MAX = 0.3;
+//const double CLAW_MOVEMENT_SPEED_MAX = 0.3;
+const double CLAW_CLOSE_SPEED = 0.4;
+
+const double CLAW_OPEN_SHUT_OFF_TIME = 1;
+
+const double CLAW_OPEN_SPEED = 0.3;
+const double CLAW_OPEN_AND_SHOOT_SPEED = 0.1;
+
+const int JOYSTICK_OPEN_BUTTON_ID = 4;
+//const int JOYSTICK_OPEN_AND_SHOOT_BUTTON_ID = 3;
+const int JOYSTICK_IDLE_BUTTON_ID = 3;
+const int JOYSTICK_CLOSE_BUTTON_ID = 5;
 
 
 const int LIFT_MAST_UPPER_CONTACT_SWITCH = 2;
@@ -48,7 +63,7 @@ const double XBOX_DEADZONE_RIGHT_JOY=0.05;
 const double JOYSTICK_DEADZONE = 0.05;
 
 const double DRIVE_SLOW_SPEED_RATIO = 0.6;
-
+const double TURN_SLOW_SPEED_RATIO = .55;
 
 
 // Claw is now electric, so no need for this

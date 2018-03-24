@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-AutonomousForward::AutonomousForward(double seconds, double speed)
+AutonomousForward::AutonomousForward(double seconds, double speed, double wait)
 {
 	std::cout << "[AutonomousForward] Constructed" << std::endl;
 
@@ -24,8 +24,10 @@ AutonomousForward::AutonomousForward(double seconds, double speed)
 	}
 
 	this->pTimer = new frc::Timer();
+	this->pTimer2 = new frc::Timer();
 
-	this->m_secondsToRun = seconds;
+	this->m_secondsToRun = seconds + wait;
+	this->m_secondsToWait = wait;
 	this->m_speed = speed;
 
 	return;
@@ -48,6 +50,9 @@ void AutonomousForward::Initialize()
 	this->pTimer->Reset();
 	this->pTimer->Start();
 
+	this->pTimer2->Reset();
+	this->pTimer2->Start();
+
 	return;
 }
 
@@ -59,8 +64,12 @@ void AutonomousForward::Execute()
 //	::SmartDashboard::PutNumber("Selected TalonID:", this->m_selectedTalonID);
 //	::SmartDashboard::PutString("Y+A = Select Talon", "Right Joy for +ve, -ve power");
 
+	double timeElapsed = this->pTimer2->Get();
 
-	CommandBase::pDriveTrain->ArcadeDrive( this->m_speed, 0.0 );
+	if(timeElapsed > m_secondsToWait){
+		CommandBase::pDriveTrain->ArcadeDrive( this->m_speed, 0.0 );
+
+	}
 
 
 	return;

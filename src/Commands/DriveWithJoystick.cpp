@@ -50,13 +50,17 @@ void DriveWithJoystick::Execute()
 	double forwardSpeed = pJoyDriver->GetY(XboxController::kRightHand);
 	double turnAngle = pJoyDriver->GetX(XboxController::kRightHand);
 
+
 	// If right joystick push button is UP, we drive SLOWLY
 	// If right joystick push button is DOWN, we drive QUICKLY
 
 	if( ! pJoyDriver->GetStickButton(XboxController::kRightHand) )
 	{
 		forwardSpeed *= DRIVE_SLOW_SPEED_RATIO;
+		turnAngle *= TURN_SLOW_SPEED_RATIO;
 	}
+
+
 
 	// Reverse the direction of the steering
 	turnAngle = -turnAngle;
@@ -66,9 +70,6 @@ void DriveWithJoystick::Execute()
 //	double throttleRight = pJoyDriver->GetTriggerAxis(frc::GenericHID::kRightHand);
 //	double forwardSpeed = throttleLeft - throttleRight;
 
-	SmartDashboard::PutNumber("Driver Forward Speed:", forwardSpeed);
-	SmartDashboard::PutNumber("Driver Turn angle:", turnAngle);
-//	SmartDashboard::PutNumber("Driver Right Trigger:", forwardSpeed);
 
 	if (fabs(forwardSpeed) <= XBOX_DEADZONE_LEFT_JOY)
 	{
@@ -80,7 +81,11 @@ void DriveWithJoystick::Execute()
 		turnAngle = 0.0;
 	}
 
-	CommandBase::pDriveTrain->ArcadeDrive( forwardSpeed, turnAngle );
+	SmartDashboard::PutNumber("Driver Forward Speed:", -forwardSpeed);
+	SmartDashboard::PutNumber("Driver Turn angle:", -turnAngle);
+//	SmartDashboard::PutNumber("Driver Right Trigger:", forwardSpeed);
+
+	CommandBase::pDriveTrain->ArcadeDrive( -forwardSpeed, -turnAngle );
 
 	// Display the encoder positions of the left and right motor
 	double leftEncoder = 0.0;

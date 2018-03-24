@@ -24,10 +24,11 @@ public:
 
 	void InitDefaultCommand() override;
 
-	void OpenCompletely(void); //Madi- The motor will open the forks
+	void OpenCompletely(bool bAndShoot); //Madi- The motor will open the forks
 
 	void CloseCompletely(void); //Madi - The motor will close the forks
 
+	void Idle(void);
 
 	void SetIntakeSpeed(double speed);
 
@@ -52,8 +53,9 @@ private:
 	enum eClawState
 	{
 		IS_IDLE,
-		IS_OPENNING,
-		IS_CLOSING
+		IS_OPENNING,				// Actively opening
+		IS_OPENNING_AND_SHOOTING,	// Slower open + intake motors running "out"
+		IS_CLOSING,					// Is
 	};
 	double m_ClawMovementSpeed;
 	eClawState m_CurrentClawState;
@@ -65,10 +67,15 @@ private:
 	// Motor to open and close the "claw"
 	can::WPI_TalonSRX* m_pClawMotor;
 
-	// Fail-safe timer in case the limit switches fail
-	frc::Timer* m_pClawMotorWatchDogTimer;
+
+	// Close:
+
+//	// Fail-safe timer in case the limit switches fail
+//	frc::Timer* m_pClawMotorWatchDogTimer;
 
 
+	// Open: run motor for 1.5 seconds, then turn off motor
+	frc::Timer* m_pOpenClawShutOffTimer;
 
 
 	// Motors for the speed of the star shaped rubber wheels
