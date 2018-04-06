@@ -30,6 +30,29 @@ public:
 	void TeleopPeriodic() override;
 	void TestPeriodic() override;
 
+	// These are the positions of the driver stations, switch, and scale
+	enum ePositions
+	{
+		LEFT, CENTRE, RIGHT, UNKNOWN
+	};
+private:
+	ePositions m_driverStationPosition;		// Left, Centre, or Right
+	// Note: the FMS sends sides based on aliance colour
+	// So these are 'our' positions, in other words...
+	ePositions m_nearSwitchPosition;			// Left or Right
+	ePositions m_scalePosition;				// Left or Right
+	ePositions m_farSwitchPosition;			// Left or Right
+public:
+	// Will populate the positions based on init game state
+	void ProcessGameStartUpState(void);
+
+	ePositions getDirverStationPosition(void);
+	ePositions getNearSwitchPosition(void);
+	ePositions getScalePosition(void);
+	ePositions getFarSwitchPositions(void);
+
+
+
 	// Have it null by default so that if testing teleop it
 	// doesn't have undefined behavior and potentially crash.
 	frc::Command* pAutonomousCommand = nullptr;

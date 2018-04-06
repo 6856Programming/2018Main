@@ -24,6 +24,10 @@ const int GRIPPER_CLAW_LIMIT_CLOSED_DIO_ID = 1;
 
 // Set how long the auton wait is in seconds
 const double AUTO_WAIT_TIME = 0.0;
+const double AUTO_DRIVE_SPEED = 0.6;
+const double AUTO_DRIVE_TIME = 4.0;
+
+
 // Now long the "pulse" of the "pulsed mode" of the intake lasts (in seconds)
 const double GRIPPER_INTAKE_PULSED_RUN_TIME = 1.0;
 // Now fast the intake motors go when in pulsed mode

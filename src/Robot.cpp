@@ -4,10 +4,6 @@
 #include "Commands/AutonomousForward.h"
 #include "Commands/AutonomousGripper.h"
 
-/**
- *
- */
-
 Robot::~Robot()
 {
 	delete this->pDriveWithJoystick;
@@ -35,8 +31,107 @@ void Robot::RobotInit()
 	m_chooser.AddObject("My Auto", pMyAutoCommand);
 	frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+	::SmartDashboard::PutNumber("AUTO: Auto Wait to Start Time", AUTO_WAIT_TIME);
+	::SmartDashboard::PutNumber("AUTO: Drive Speed After wait time", AUTO_DRIVE_SPEED);
+	::SmartDashboard::PutNumber("AUTO: Time to Drive", AUTO_DRIVE_TIME);
+
+
+	//
+	this->m_driverStationPosition = Robot::UNKNOWN;		// Left, Centre, or Right
+
+	this->m_nearSwitchPosition = Robot::UNKNOWN;			// Left or Right
+	this->m_scalePosition = Robot::UNKNOWN;				// Left or Right
+	this->m_farSwitchPosition = Robot::UNKNOWN;			// Left or Right
+
+	this->ProcessGameStartUpState();
+
 	return;
 }
+
+//	ePositions m_driverStationPosition;		// Left, Centre, or Right
+//	// Note: the FMS sends sides based on aliance colour
+//	// So these are 'our' positions, in other words...
+//	ePositions m_nearSwitchPosition			// Left or Right
+//	ePositions m_scalePosition;				// Left or Right
+//	ePositions m_farSwitchPosition;			// Left or Right
+
+// Will populate the positions based on init game state
+// SHOULD BE CALLED ON AUTOINIT
+void Robot::ProcessGameStartUpState(void)
+{
+//	int _RP = 10; // 10 = Left, 20 = Center, 30 = Right
+//	int _SP =  1;  // 1 = Left, 2 = Right
+
+	switch ( frc::DriverStation::GetInstance().GetLocation() )
+	{
+	case 1:
+		this->m_driverStationPosition = Robot::LEFT;
+		break;
+	case 2:
+		this->m_driverStationPosition = Robot::CENTRE;
+		break;
+	case 3:
+		this->m_driverStationPosition = Robot::RIGHT;
+	}
+
+	std::string gameItemsString = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+
+	// Near switch position?
+	if ( gameItemsString[0] == 'L' )
+	{
+		this->m_nearSwitchPosition = Robot::LEFT;
+	}
+	else if ( gameItemsString[0] == 'R' )
+	{
+		this->m_nearSwitchPosition = Robot::RIGHT;
+	}
+
+	// Scale position?
+	if ( gameItemsString[1] == 'L' )
+	{
+		this->m_scalePosition = Robot::LEFT;
+	}
+	else if ( gameItemsString[1] == 'R' )
+	{
+		this->m_scalePosition = Robot::RIGHT;
+	}
+
+	// Far switch position
+	if ( gameItemsString[2] == 'L' )
+	{
+		this->m_farSwitchPosition = Robot::LEFT;
+	}
+	else if ( gameItemsString[2] == 'R' )
+	{
+		this->m_farSwitchPosition = Robot::RIGHT;
+	}
+
+
+	return;
+}
+
+
+Robot::ePositions Robot::getDirverStationPosition(void)
+{
+	return this->m_driverStationPosition;
+}
+
+Robot::ePositions Robot::getNearSwitchPosition(void)
+{
+	return this->m_nearSwitchPosition;
+}
+
+Robot::ePositions Robot::getScalePosition(void)
+{
+	return this->m_scalePosition;
+}
+
+Robot::ePositions Robot::getFarSwitchPositions(void)
+{
+	return this->m_farSwitchPosition;
+}
+
+
 
 /**
  *
@@ -82,7 +177,19 @@ void Robot::AutonomousInit()
 //	}
 
 	//::Scheduler::GetInstance()->AddCommand( new WaitCommand(5.0));
-	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 4.0 , 0.6 , AUTO_WAIT_TIME) );
+
+
+	double autoWaitToStartTime = ::SmartDashboard::GetNumber("AUTO: Auto Wait to Start Time", AUTO_WAIT_TIME);
+	double autoDriveSpeed = ::SmartDashboard::GetNumber("AUTO: Drive Speed After wait time", AUTO_DRIVE_SPEED);
+	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: Time to Drive", AUTO_DRIVE_TIME);
+
+
+//	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 4.0 , 0.6 , AUTO_WAIT_TIME) );
+	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( autoDriveTime, 		// double seconds
+	                                                               autoDriveSpeed,  	// double speed
+																   autoWaitToStartTime) );	// double wait
+
+
 	// TODO: Add command for mast raise
 	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_CLOSED ) );
 
