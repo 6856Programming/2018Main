@@ -18,6 +18,10 @@ public:
 	bool IsFinished() override;
 	void End() override;
 	void Interrupted() override;
+
+	// Added as a Q-n-D test the various motors Hail Mary pass at UWO
+	void DEBUG_ControllerTestMotors(void);
+
 };
 
 #endif

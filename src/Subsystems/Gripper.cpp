@@ -78,7 +78,8 @@ void Gripper::InitDefaultCommand()
 	return;
 }
 
-void Gripper::OpenCompletely(bool bAndShoot) //Solenoid is OFF, cylinder is in retracted position
+/*
+void Gripper::OpenCompletely(bool bAndShoot)
 {
 	std::cout << "Gripper::Open()" << std::endl;
 
@@ -109,8 +110,10 @@ void Gripper::OpenCompletely(bool bAndShoot) //Solenoid is OFF, cylinder is in r
 
 	return;
 }
+*/
 
-void Gripper::CloseCompletely(void) //Solenoid is ON, cylinder is in extended position
+/*
+void Gripper::CloseCompletely(void)
 {
 	std::cout << "Gripper::Close()" << std::endl;
 
@@ -121,6 +124,7 @@ void Gripper::CloseCompletely(void) //Solenoid is ON, cylinder is in extended po
 
 	return;
 }
+*/
 
 //NEW CODE
 void Gripper::Idle(void)
@@ -134,8 +138,15 @@ void Gripper::Idle(void)
 }
 void Gripper::SetIntakeSpeed(double speed)
 {
-	this->m_pLeftIntakeMotor->Set(speed);
-	this->m_pRightIntakeMotor->Set(speed);
+	double leftIntakeSpeedActual = speed * this->m_LEFT_INTAKE_SPEED_ADJUST_RATIO;
+	double rightIntakeSpeedActual = speed * this->m_RIGHT_INTAKE_SPEED_ADJUST_RATIO;
+
+	::SmartDashboard::PutNumber("Intake speed left", leftIntakeSpeedActual);
+	::SmartDashboard::PutNumber("Intake speed right", rightIntakeSpeedActual);
+
+	this->m_pLeftIntakeMotor->Set(leftIntakeSpeedActual);
+	this->m_pRightIntakeMotor->Set(rightIntakeSpeedActual);
+
 	return;
 }
 
@@ -151,6 +162,29 @@ void Gripper::PulseIntake(double speed, double time)
 	this->m_pPulsedIntakeCountdownTimer->Start();
 
 	this->m_bPulsedIntakeModeOn = true;
+
+	return;
+}
+
+// These are NOT timed, but simply move the claw open and closed
+void Gripper::ClawOpen(void)
+{
+	::SmartDashboard::PutNumber( "ClawOpen(): speed is", this->m_CLAW_MAX_MOVEMENT_SPEED );
+	this->m_pClawMotor->Set( this->m_CLAW_MAX_MOVEMENT_SPEED );
+	return;
+}
+
+void Gripper::ClawClose(void)
+{
+	::SmartDashboard::PutNumber( "ClawOpen(): speed is", -this->m_CLAW_MAX_MOVEMENT_SPEED );
+	this->m_pClawMotor->Set( -this->m_CLAW_MAX_MOVEMENT_SPEED );
+	return;
+}
+
+void Gripper::ClawStop(void)
+{
+//	std::cout << "ClawStop() called" << std::endl;
+	this->m_pClawMotor->Set(0.0);
 
 	return;
 }
@@ -186,6 +220,7 @@ void Gripper::UpdateState(void)
 	}// if ( this->m_bPulsedIntakeModeOn )
 
 
+/*
 	// See what state the claw is supposed to be in
 	switch ( this->m_CurrentClawState )
 	{
@@ -255,7 +290,7 @@ void Gripper::UpdateState(void)
 		break;
 	}
 
-	/* Has the claw motor been running too long?
+	 Has the claw motor been running too long?
 	if ( this->m_pClawMotorWatchDogTimer->Get() >= GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME )
 	{
 		// The motor has been running too long, so shut it off!
@@ -266,7 +301,8 @@ void Gripper::UpdateState(void)
 				<< GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME << " seconds." << std::endl;
 
 	}
-	*/
+
+*/
 
 	return;
 }

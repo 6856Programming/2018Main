@@ -45,36 +45,6 @@ void GripperControl::Execute()
 	Gripper* pGripper = ::CommandBase::pGripper;
 
 
-// For DRIVER xbox controller, was A - intake in, B - intake out
-//	if ( pJoyDriver->GetAButtonPressed() )
-//	{
-//		pGripper->PulseIntake( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
-//	}
-//	else if ( pJoyDriver->GetBButtonPressed() )
-//	{
-//		pGripper->PulseIntake( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
-//	}
-//
-//
-//	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
-//
-//	// Gripper control:
-//	// Push ONCE to do FULL close
-//	// (i.e. They DON'T have to hold the button to move the claw)
-//
-//	if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kLeftHand) )
-//	{
-//		std::cout << "GripperControl::Open() called..." << std::endl;
-//		CommandBase::pGripper->OpenCompletely();
-//	}
-//	else if ( pJoyDriver->GetBumperPressed(frc::GenericHID::kRightHand) )
-//	{
-//		std::cout << "GripperControl::Close() called..." << std::endl;
-//		CommandBase::pGripper->CloseCompletely();
-//	}
-
-
-
 // For OPERATOR joystick control:
 // - trigger (button 1) = shoot out, "top" button (button 2) (lower thumb button) = intake
 
@@ -82,47 +52,48 @@ void GripperControl::Execute()
 
 	if ( pJoyOperator->GetTriggerPressed() )
 	{
+		std::cout << "Gripper: Trigger pressed: PulseIntake(" << GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED << ")" << std::endl;
 		pGripper->PulseIntake( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
 	}
 	else if ( pJoyOperator->GetTopPressed() )
 	{
+		std::cout << "Gripper: Top pressed: PulsedIntake(" << -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED << ")" << std::endl;
 		pGripper->PulseIntake( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED, GRIPPER_INTAKE_PULSED_RUN_TIME );
 	}
+
+//	if ( pJoyOperator->GetTrigger() )
+//	{
+//		pGripper->SetIntakeSpeed( GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED );
+//	}
+//	else if ( pJoyOperator->GetTop() )
+//	{
+//		pGripper->SetIntakeSpeed( -GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED );
+//	}
+//	else
+//	{
+//		pGripper->SetIntakeSpeed(0.0);
+//	}
 
 // For OPERATOR joystick control:
 // - left top (button 4) = open claw, right top (button 5) = close claw
 
-	// Gripper control:
-	// Push ONCE to do FULL close
-	// (i.e. They DON'T have to hold the button to move the claw)
+	switch ( this->m_DecodeOperatorGripperCommand() )
+	{
+	case GripperControl::OPEN_GRIPPER:
+//		std::cout << "GripperControl::Open() called..." << std::endl;
+		CommandBase::pGripper->ClawOpen();
+		break;
 
-		if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_OPEN_BUTTON_ID) )
-		{
-			std::cout << "GripperControl::Open() called..." << std::endl;
-			CommandBase::pGripper->OpenCompletely(false);
-		}
-		else if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_IDLE_BUTTON_ID) )
-		{
-			std::cout << "GripperControl::Idle()..." << std::endl;
-			pGripper->Idle();
-		}
+	case GripperControl::CLOSE_GRIPPER:
+//		std::cout << "GripperControl::Close() called..." << std::endl;
+		CommandBase::pGripper->ClawClose();
+		break;
 
-/*		else if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_OPEN_AND_SHOOT_BUTTON_ID) )
-		{
-			std::cout << "GripperControl::OpenAndShoot()..." << std::endl;
-			pGripper->OpenCompletely(true);
-		}
-*/
-		else if ( pJoyOperator->GetRawButtonPressed(JOYSTICK_CLOSE_BUTTON_ID) )
-		{
-			std::cout << "GripperControl::Close() called..." << std::endl;
-			CommandBase::pGripper->CloseCompletely();
-		}
-//		else if ( pJoyOperator->GetRawButtonPressed(3) )
-//		{
-//			std::cout << "GripperControl::Idle() called..." << std::endl;
-//			CommandBase::pGripper->Idle();
-//		}
+	case GripperControl::STOP_GRIPPER:
+	default:
+		CommandBase::pGripper->ClawStop();
+
+	}// switch ( this->m_DecodeOperatorGripperCommand() )
 
 
 	// +++++++ MUST CALL EVERY UPDATE ++++++
@@ -130,6 +101,31 @@ void GripperControl::Execute()
 
 	return;
 }
+
+GripperControl::eGripperCommand GripperControl::m_DecodeOperatorGripperCommand(void)
+{
+	frc::Joystick* pJoyOperator = ::CommandBase::pOI->GetJoystickOperator();
+
+	// Open pressed and closed NOT pressed?
+	if ( pJoyOperator->GetRawButton(JOYSTICK_OPEN_BUTTON_ID) &&
+	     ! pJoyOperator->GetRawButton(JOYSTICK_CLOSE_BUTTON_ID) )
+	{
+		return GripperControl::OPEN_GRIPPER;
+	}
+
+	// Closed pressed and open NOT pressed?
+	if ( pJoyOperator->GetRawButton(JOYSTICK_CLOSE_BUTTON_ID) &&
+	     ! pJoyOperator->GetRawButton(JOYSTICK_OPEN_BUTTON_ID) )
+	{
+		return GripperControl::CLOSE_GRIPPER;
+	}
+
+
+
+	// No idea what's happening, so return stop (safest situation)
+	return GripperControl::STOP_GRIPPER;
+}
+
 
 
 bool GripperControl::IsFinished()

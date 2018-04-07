@@ -1,14 +1,17 @@
+#include <Commands/AutoBasicForwardTimerWithDelay.h>
+
 #include <Commands/Waiter.h>
 #include "Robot.h"
 
-#include "Commands/AutonomousForward.h"
 #include "Commands/AutonomousGripper.h"
+#include "Commands/AutonomousRotateGyro.h"
+
 
 Robot::~Robot()
 {
 	delete this->pDriveWithJoystick;
-	delete this->pDefaultAutoCommand;
-	delete this->pMyAutoCommand;
+//	delete this->pDefaultAutoCommand;
+//	delete this->pMyAutoCommand;
 
 	return;
 }
@@ -23,18 +26,6 @@ void Robot::RobotInit()
 
 	// instantiate the commands
 	this->pDriveWithJoystick = new DriveWithJoystick();
-	this->pDefaultAutoCommand = new ExampleCommand();
-	this->pMyAutoCommand = new MyAutoCommand();
-
-	// Setup smartdashboard autonomous options
-	m_chooser.AddDefault("Default Auto", pDefaultAutoCommand);
-	m_chooser.AddObject("My Auto", pMyAutoCommand);
-	frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-
-	::SmartDashboard::PutNumber("AUTO: Auto Wait to Start Time", AUTO_WAIT_TIME);
-	::SmartDashboard::PutNumber("AUTO: Drive Speed After wait time", AUTO_DRIVE_SPEED);
-	::SmartDashboard::PutNumber("AUTO: Time to Drive", AUTO_DRIVE_TIME);
-
 
 	//
 	this->m_driverStationPosition = Robot::UNKNOWN;		// Left, Centre, or Right
@@ -44,6 +35,7 @@ void Robot::RobotInit()
 	this->m_farSwitchPosition = Robot::UNKNOWN;			// Left or Right
 
 	this->ProcessGameStartUpState();
+
 
 	return;
 }
@@ -163,6 +155,16 @@ void Robot::AutonomousInit()
 
 //	std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
 //	std::cout << "[Robot] Auto Selected: " << autoSelected << std::endl;
+
+
+	//	this->pDefaultAutoCommand = new ExampleCommand();
+	//	this->pMyAutoCommand = new MyAutoCommand();
+
+		// Setup smartdashboard autonomous options
+	//	m_chooser.AddDefault("Default Auto", pDefaultAutoCommand);
+	//	m_chooser.AddObject("My Auto", pMyAutoCommand);
+
+//	frc::SmartDashboard::PutData("Auto Modes", &(this->m_chooser) );
 //
 //	pAutonomousCommand = m_chooser.GetSelected();
 //
@@ -178,20 +180,24 @@ void Robot::AutonomousInit()
 
 	//::Scheduler::GetInstance()->AddCommand( new WaitCommand(5.0));
 
+	// For now, use the Quick-n-Dirty AutoBasicForwardTimerWithDelay() command
 
-	double autoWaitToStartTime = ::SmartDashboard::GetNumber("AUTO: Auto Wait to Start Time", AUTO_WAIT_TIME);
-	double autoDriveSpeed = ::SmartDashboard::GetNumber("AUTO: Drive Speed After wait time", AUTO_DRIVE_SPEED);
-	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: Time to Drive", AUTO_DRIVE_TIME);
+
+	double autoWaitToStartTime = ::SmartDashboard::GetNumber("AUTO: seconds to wait to start driving", DEFAULT_WAIT_TO_START_TIME);
+	double autoDriveSpeed = ::SmartDashboard::GetNumber("AUTO: drive speed", DEFAULT_DRIVE_SPEED);
+	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: seconds to drive", DEFAULT_DRIVE_FORWARD_TIME);
 
 
 //	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 4.0 , 0.6 , AUTO_WAIT_TIME) );
-	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( autoDriveTime, 		// double seconds
-	                                                               autoDriveSpeed,  	// double speed
-																   autoWaitToStartTime) );	// double wait
+
+	Command* pAuto = new AutoBasicForwardTimerWithDelay(autoWaitToStartTime, autoDriveSpeed, autoDriveTime);
+	//Command* pAuto = new AutonomousRotateGyro( 90.0 );
+
+	::Scheduler::GetInstance()->AddCommand( pAuto );	// double wait
 
 
 	// TODO: Add command for mast raise
-	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_CLOSED ) );
+//	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_CLOSED ) );
 
 	return;
 }

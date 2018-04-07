@@ -33,9 +33,7 @@ void DriveWithJoystick::Initialize()
 	return;
 }
 
-/**
- *
- */
+
 
 void DriveWithJoystick::Execute()
 {
@@ -59,6 +57,13 @@ void DriveWithJoystick::Execute()
 		forwardSpeed *= DRIVE_SLOW_SPEED_RATIO;
 		turnAngle *= TURN_SLOW_SPEED_RATIO;
 	}
+
+
+//	// ***************************************************************
+//
+//	this->DEBUG_ControllerTestMotors();
+//
+//	// ***************************************************************
 
 
 
@@ -91,7 +96,7 @@ void DriveWithJoystick::Execute()
 	double leftEncoder = 0.0;
 	double rightEncoder = 0.0;
 
-	::CommandBase::pDriveTrain->getEncoderPosition( leftEncoder, rightEncoder );
+	::CommandBase::pDriveTrain->getEncoderPositionInTicks( leftEncoder, rightEncoder );
 
 	::SmartDashboard::PutNumber("Left Encoder", leftEncoder);
 	::SmartDashboard::PutNumber("Right Encoder", rightEncoder);
@@ -138,4 +143,53 @@ void DriveWithJoystick::Interrupted()
 {
 	return;
 }
+
+
+int DEBUG_selectedMotorID = 0;
+can::WPI_TalonSRX* DEBUG_pTalon[8] = {0};
+
+// Added as a Q-n-D test the various motors Hail Mary pass at UWO
+void DriveWithJoystick::DEBUG_ControllerTestMotors(void)
+{
+	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+
+	if ( pJoyDriver->GetBButtonPressed() )
+	{
+		DEBUG_selectedMotorID++;
+	}
+	if ( pJoyDriver->GetAButtonPressed() )
+	{
+		DEBUG_selectedMotorID--;
+	}
+	if ( DEBUG_selectedMotorID > 8 )	{ DEBUG_selectedMotorID = 1; }
+	if ( DEBUG_selectedMotorID < 1 )	{ DEBUG_selectedMotorID = 8; }
+
+
+	// Created yet?
+	if ( DEBUG_pTalon[DEBUG_selectedMotorID] == 0 )
+	{
+		DEBUG_pTalon[DEBUG_selectedMotorID] = new can::WPI_TalonSRX(DEBUG_selectedMotorID);
+	}
+
+	double testMotorSpeed = pJoyDriver->GetTriggerAxis(XboxController::kLeftHand) - pJoyDriver->GetTriggerAxis(XboxController::kRightHand);
+
+	double leftTrigger = pJoyDriver->GetTriggerAxis(XboxController::kLeftHand);
+	double rightTrigger = pJoyDriver->GetTriggerAxis(XboxController::kRightHand);
+
+	::SmartDashboard::PutNumber("DEBUG Left Trigger", leftTrigger);
+	::SmartDashboard::PutNumber("DEBUG Right Trigger", rightTrigger);
+
+	// Clamp down the speed
+	testMotorSpeed *= 0.5;
+
+
+	::SmartDashboard::PutNumber("DEBUG Selected Motor ID", DEBUG_selectedMotorID);
+	::SmartDashboard::PutNumber("DEBUG Selected Motor speed", testMotorSpeed);
+
+
+	DEBUG_pTalon[DEBUG_selectedMotorID]->Set(testMotorSpeed);
+
+	return;
+}
+
 

@@ -51,6 +51,8 @@ public:
 	ePositions getScalePosition(void);
 	ePositions getFarSwitchPositions(void);
 
+	// Will place the default smart dashboard settings
+	void InitSmartDashboardDefaults(void);
 
 
 	// Have it null by default so that if testing teleop it
@@ -61,8 +63,8 @@ public:
 
 	// declare the commands
 	DriveWithJoystick* pDriveWithJoystick;
-	ExampleCommand* pDefaultAutoCommand;
-	MyAutoCommand* pMyAutoCommand;
+//	ExampleCommand* pDefaultAutoCommand;
+//	MyAutoCommand* pMyAutoCommand;
 
 private:
 

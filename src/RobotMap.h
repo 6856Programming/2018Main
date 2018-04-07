@@ -2,17 +2,17 @@
 #define _ROBOTMAP_HG_
 
 //Drive Train
-const int DRIVETRAIN_RIGHT_FRONT_MOTOR_ID = 1;
-const int DRIVETRAIN_RIGHT_REAR_MOTOR_ID = 2;
-const int DRIVETRAIN_LEFT_FRONT_MOTOR_ID = 3;
-const int DRIVETRAIN_LEFT_REAR_MOTOR_ID = 4;
+const int DRIVETRAIN_RIGHT_FRONT_MOTOR_ID = 1;		// DriveRightFront
+const int DRIVETRAIN_RIGHT_REAR_MOTOR_ID = 2;		// DriveRightRear
+const int DRIVETRAIN_LEFT_FRONT_MOTOR_ID = 3;		// DriveLeftFront
+const int DRIVETRAIN_LEFT_REAR_MOTOR_ID = 4;		// DriveLeftRear
 
-const int LIFTER_MOTOR_ID = 5;
+const int LIFTER_MOTOR_ID = 5;						// LiftMotor
 const double LIFT_MAST_SPEED_RATIO = 0.5;
 
-const int GRIPPER_INTAKE_LEFT_MOTOR_ID = 6;
-const int GRIPPER_INTAKE_RIGHT_MOTOR_ID = 7;
-const int GRIPPER_CLAW_MOTOR_ID = 8;
+const int GRIPPER_INTAKE_LEFT_MOTOR_ID = 6;			// GripperIntakeLeft
+const int GRIPPER_INTAKE_RIGHT_MOTOR_ID = 8;		// GripperIntakeRight
+const int GRIPPER_CLAW_MOTOR_ID = 7;				// GripperClaw
 
 const int GRIPPER_CLAW_LIMIT_OPEN_DIO_ID = 0;
 const int GRIPPER_CLAW_LIMIT_CLOSED_DIO_ID = 1;
@@ -22,10 +22,10 @@ const int GRIPPER_CLAW_LIMIT_CLOSED_DIO_ID = 1;
 //  jamming the gripper claw - so the motor won't run when jammed.
 //const double GRIPPER_CLAW_MOVEMENT_WATCHDOG_TIMER_TIME = 0.5;
 
-// Set how long the auton wait is in seconds
-const double AUTO_WAIT_TIME = 0.0;
-const double AUTO_DRIVE_SPEED = 0.6;
-const double AUTO_DRIVE_TIME = 4.0;
+// For the AutoBasicForwardTimerWithDelay() command
+const double DEFAULT_WAIT_TO_START_TIME = 0.0;
+const double DEFAULT_DRIVE_SPEED = 0.6;
+const double DEFAULT_DRIVE_FORWARD_TIME = 4.0;
 
 
 // Now long the "pulse" of the "pulsed mode" of the intake lasts (in seconds)
@@ -37,11 +37,11 @@ const double GRIPPER_SHOOT_PLUSED_MODE_MOTOR_SPEED = 0.80;
 
 // The maximum speed the claw can move
 //const double CLAW_MOVEMENT_SPEED_MAX = 0.3;
-const double CLAW_CLOSE_SPEED = 0.4;
+const double CLAW_CLOSE_SPEED = 0.05;
 
 const double CLAW_OPEN_SHUT_OFF_TIME = 1;
 
-const double CLAW_OPEN_SPEED = 0.3;
+const double CLAW_OPEN_SPEED = 0.05;
 const double CLAW_OPEN_AND_SHOOT_SPEED = 0.1;
 
 const int JOYSTICK_OPEN_BUTTON_ID = 4;

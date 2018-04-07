@@ -30,8 +30,14 @@ public:
 
 	void Reset();
 
-	void getEncoderPosition(double &leftEncoder, double &rightEncoder);
-	void getEncoderVelocity(double &leftEncoder, double &rightEncoder);
+	void getEncoderPositionInTicks(double &leftEncoder, double &rightEncoder);
+	void getEncoderVelocityInTicks(double &leftEncoder, double &rightEncoder);
+
+	void getEncoderPositionInInches(double &leftEncoder, double &rightEncoder);
+	void getEncoderVelocityInInches(double &leftEncoder, double &rightEncoder);
+
+	double ConvertEncoderTicksToInches(double encoderTicks);
+	double ConvertInchesToEncoderTicks(double distanceInches);
 
 	void resetEncoder(bool bLeft, bool bRight);
 
@@ -42,9 +48,19 @@ public:
 		RIGHT_FRONT,
 		RIGHT_REAR
 	};
+
+
 	// This is used to get the information directly from the motor
 	double DEBUG_getEncoderPositionFromMotorID( eMotorID motorID );
 	double DEBUG_getEncoderVelocityFromMotorID( eMotorID motorID );
+
+	void setWheelDiameter( double wheelDiameterInches );
+	double getWheelDiameter(void);
+	void setEncoderTicksPerRevolution( double encoderTicksPerRevolution );
+	double getEncoderTicksPerRevolution(void);
+
+	double getWheelCircumference(void);
+	double getEncoderTicksPerInch(void);
 
 private:
 	can::WPI_TalonSRX* pLeftFrontMotor;
@@ -56,6 +72,13 @@ private:
 	frc::SpeedControllerGroup* pRightSpeedControllerGroup;
 
 	frc::DifferentialDrive* pRobotDrive;
+
+	double m_wheelDiameterInches;			// Is set
+	double m_encoderTicksPerRevolution;		// Is set
+
+	double m_DEFAULT_WHEEL_DIAMETER_INCHES = 6.0;
+	double m_DEFAULT_TICKS_PER_REVOLUTION = 1440.0;
+
 };
 
 #endif

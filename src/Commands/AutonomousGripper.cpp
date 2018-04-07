@@ -37,18 +37,18 @@ void AutonomousGripper::Initialize()
 void AutonomousGripper::Execute()
 {
 
-    if (this->m_openOrClose == 'o')
-    {
-       std::cout << "[AutonomousForward] Opening Grippers" << std::endl;
-       CommandBase::pGripper->OpenCompletely(false);
-    }
+//   if (this->m_openOrClose == 'o')
+//   {
+//      std::cout << "[AutonomousForward] Opening Grippers" << std::endl;
+//      CommandBase::pGripper->OpenCompletely(false);
+//   }
+//   else if (this->m_openOrClose == 'c')
+//   {
+//      std::cout << "[AutonomousForward] Closing Grippers" << std::endl;
+//      CommandBase::pGripper->CloseCompletely();
+//    }
 
-    else if (this->m_openOrClose == 'c')
-    {
-       std::cout << "[AutonomousForward] Closing Grippers" << std::endl;
-       CommandBase::pGripper->CloseCompletely();
-    }
-    return;
+	return;
 }
 
 bool AutonomousGripper::IsFinished()

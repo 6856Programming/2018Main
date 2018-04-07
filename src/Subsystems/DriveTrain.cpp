@@ -2,6 +2,7 @@
 #include "../Commands/DriveWithJoystick.h"
 #include "../Commands/DebugTalonSRXTester.h"
 #include <iostream>
+#include <math.h>
 
 DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 {
@@ -31,8 +32,12 @@ DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 
 	pRobotDrive->SetSafetyEnabled(false);
 
+	this->m_wheelDiameterInches = this->m_DEFAULT_WHEEL_DIAMETER_INCHES;
+	this->m_encoderTicksPerRevolution = this->m_DEFAULT_TICKS_PER_REVOLUTION;
+
 	return;
 }
+
 
 /**
  *
@@ -88,6 +93,7 @@ void DriveTrain::Drive(XboxController* pJoystick) //This needs to use the driver
 void DriveTrain::ArcadeDrive( double xSpeed, double zRotation )
 {
 	// Taken from DriveTrain::Drive()
+	::SmartDashboard::PutNumber("ArcadeDrive():speed", xSpeed);
 	this->pRobotDrive->ArcadeDrive(xSpeed, -zRotation);
 
 	return;
@@ -120,14 +126,14 @@ void DriveTrain::Reset()
 	return;
 }
 
-void DriveTrain::getEncoderPosition(double &leftEncoder, double &rightEncoder)
+void DriveTrain::getEncoderPositionInTicks(double &leftEncoder, double &rightEncoder)
 {
 	leftEncoder = this->pLeftFrontMotor->GetSelectedSensorPosition(0);
 	rightEncoder = this->pRightFrontMotor->GetSelectedSensorPosition(0);
 	return;
 }
 
-void DriveTrain::getEncoderVelocity(double &leftEncoder, double &rightEncoder)
+void DriveTrain::getEncoderVelocityInTicks(double &leftEncoder, double &rightEncoder)
 {
 	leftEncoder = this->pLeftFrontMotor->GetSelectedSensorVelocity(0);
 	rightEncoder = this->pRightFrontMotor->GetSelectedSensorVelocity(0);
@@ -198,5 +204,85 @@ double DriveTrain::DEBUG_getEncoderVelocityFromMotorID( eMotorID motorID )
 
 	return 0.0;
 }
+
+
+void DriveTrain::setWheelDiameter( double wheelDiameterInches )
+{
+	this->m_wheelDiameterInches = wheelDiameterInches;
+	return;
+}
+
+double DriveTrain::getWheelDiameter(void)
+{
+	return this->m_wheelDiameterInches;
+}
+
+void DriveTrain::setEncoderTicksPerRevolution( double encoderTicksPerRevolution )
+{
+	this->m_encoderTicksPerRevolution = encoderTicksPerRevolution;
+	return;
+}
+
+double DriveTrain::getEncoderTicksPerRevolution(void)
+{
+	return this->m_encoderTicksPerRevolution;
+}
+
+double DriveTrain::getWheelCircumference(void)
+{
+	return M_PI * this->m_wheelDiameterInches;
+}
+
+double DriveTrain::ConvertEncoderTicksToInches(double encoderTicks)
+{
+	return ( this->m_encoderTicksPerRevolution / this->getWheelCircumference() ) * encoderTicks;
+}
+
+double DriveTrain::ConvertInchesToEncoderTicks(double distanceInches)
+{
+	return ( distanceInches / this->getWheelCircumference() ) * this->m_encoderTicksPerRevolution;
+}
+
+void DriveTrain::getEncoderPositionInInches(double &leftEncoder, double &rightEncoder)
+{
+	// Get the number of ticks...
+	this->getEncoderPositionInTicks( leftEncoder, rightEncoder );
+
+	// ...convert to inches
+	leftEncoder = this->ConvertEncoderTicksToInches(leftEncoder);
+	rightEncoder = this->ConvertEncoderTicksToInches(rightEncoder);
+
+	return;
+}
+
+
+void DriveTrain::getEncoderVelocityInInches(double &leftEncoder, double &rightEncoder)
+{
+	// Get the number of ticks...
+	this->getEncoderVelocityInTicks( leftEncoder, rightEncoder );
+
+	// ...convert to inches
+	leftEncoder = this->ConvertEncoderTicksToInches( leftEncoder );
+	rightEncoder = this->ConvertEncoderTicksToInches( rightEncoder );
+
+	return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -24,9 +24,17 @@ public:
 
 	void InitDefaultCommand() override;
 
-	void OpenCompletely(bool bAndShoot); //Madi- The motor will open the forks
+//	void OpenCompletely(bool bAndShoot); //Madi- The motor will open the forks
 
-	void CloseCompletely(void); //Madi - The motor will close the forks
+//	void CloseCompletely(void); //Madi - The motor will close the forks
+
+	// These are NOT timed, but simply move the claw open and closed
+	void ClawOpen(void);
+	void ClawClose(void);
+	void ClawStop(void);
+private:
+	const double m_CLAW_MAX_MOVEMENT_SPEED = 0.5;
+public:
 
 	void Idle(void);
 
@@ -35,6 +43,7 @@ public:
 	// This will run the intake for the desired speed.
 	// Each time it's called, the timer resets.
 	void PulseIntake(double speed, double time);
+
 
 	bool isClawOpenLimitSwitchPushed(void);
 	bool isClawClosedLimitSwitchPushed(void);
@@ -81,6 +90,9 @@ private:
 	// Motors for the speed of the star shaped rubber wheels
 	can::WPI_TalonSRX* m_pLeftIntakeMotor;
 	can::WPI_TalonSRX* m_pRightIntakeMotor;
+
+	const double m_LEFT_INTAKE_SPEED_ADJUST_RATIO = 1.0;
+	const double m_RIGHT_INTAKE_SPEED_ADJUST_RATIO = 1.0;
 
 	// "Pulse" timer for the intake motors
 	// (i.e. they will run for this length of time, then stop)
