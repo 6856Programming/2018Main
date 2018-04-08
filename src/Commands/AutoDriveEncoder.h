@@ -1,19 +1,19 @@
 #ifndef _AutoDriveEncoder_HG_
 #define _AutoDriveEncoder_HG_
 
+#include <Commands/sMovementParamHelper.h>
 #include <iostream>
 #include <WPILib.h>
 #include "../CommandBase.h"
 #include "MyAutoCommand.h"
 
-/**
- *
- */
 
 class AutoDriveEncoder: public CommandBase
 {
 public:
-	AutoDriveEncoder(double inchesToDrive, double speed);
+
+	AutoDriveEncoder( double inchesToDrive, double speed );
+	AutoDriveEncoder( sMovementParamHelper moveParams );
 	virtual ~AutoDriveEncoder();
 	void Initialize() override;
 	void Execute() override;
@@ -23,11 +23,13 @@ public:
 
 private:
 
-	double m_speed;
-	double m_inchesToDrive;
+	// This has all the 'brains' of the movement
+	sMovementParamHelper m_MovementState;
 
 	// Can't call c'tor
 	AutoDriveEncoder();
+
+
 
 };
 

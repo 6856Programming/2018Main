@@ -28,8 +28,6 @@ private:
 
     double m_direction;
 
-    frc::ADXRS450_Gyro* m_pGyro;
-
 
     AutonomousRotateGyro();
 };

@@ -37,12 +37,12 @@ const double GRIPPER_SHOOT_PLUSED_MODE_MOTOR_SPEED = 0.80;
 
 // The maximum speed the claw can move
 //const double CLAW_MOVEMENT_SPEED_MAX = 0.3;
-const double CLAW_CLOSE_SPEED = 0.05;
-
-const double CLAW_OPEN_SHUT_OFF_TIME = 1;
-
-const double CLAW_OPEN_SPEED = 0.05;
-const double CLAW_OPEN_AND_SHOOT_SPEED = 0.1;
+//const double CLAW_CLOSE_SPEED = 0.05;
+//
+//const double CLAW_OPEN_SHUT_OFF_TIME = 1;
+//
+//const double CLAW_OPEN_SPEED = 0.05;
+//const double CLAW_OPEN_AND_SHOOT_SPEED = 0.1;
 
 const int JOYSTICK_OPEN_BUTTON_ID = 4;
 //const int JOYSTICK_OPEN_AND_SHOOT_BUTTON_ID = 3;

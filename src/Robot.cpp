@@ -5,6 +5,7 @@
 
 #include "Commands/AutonomousGripper.h"
 #include "Commands/AutonomousRotateGyro.h"
+#include "Commands/AutoDriveEncoder.h"
 
 
 Robot::~Robot()
@@ -188,16 +189,17 @@ void Robot::AutonomousInit()
 	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: seconds to drive", DEFAULT_DRIVE_FORWARD_TIME);
 
 
-//	::Scheduler::GetInstance()->AddCommand( new AutonomousForward( 4.0 , 0.6 , AUTO_WAIT_TIME) );
-
 	Command* pAuto = new AutoBasicForwardTimerWithDelay(autoWaitToStartTime, autoDriveSpeed, autoDriveTime);
-	//Command* pAuto = new AutonomousRotateGyro( 90.0 );
-
 	::Scheduler::GetInstance()->AddCommand( pAuto );	// double wait
 
 
-	// TODO: Add command for mast raise
-//	::Scheduler::GetInstance()->AddCommand( new AutonomousGripper( AutonomousGripper::GRIPPER_CLOSED ) );
+	//
+//	double inchesToDrive = 48.0;
+//	double maxDriveSpeed = 0.5;
+//
+//	Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
+//	::Scheduler::GetInstance()->AddCommand( pAuto );
+
 
 	return;
 }

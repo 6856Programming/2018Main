@@ -192,4 +192,18 @@ void DriveWithJoystick::DEBUG_ControllerTestMotors(void)
 	return;
 }
 
+// If the driver A, B, X, AND Y are pressed AT THE SAME TIME, the gyro calibrates
+void DriveWithJoystick::CheckForGyroCalibration(void)
+{
+	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
+
+	if ( pJoyDriver->GetAButton() && pJoyDriver->GetBButton() &&
+	     pJoyDriver->GetXButton() && pJoyDriver->GetYButton() )
+	{
+		CommandBase::pDriveTrain->Gyro_Calibrate();
+	}
+
+
+	return;
+}
 

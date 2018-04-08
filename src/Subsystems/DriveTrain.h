@@ -6,6 +6,7 @@
 #include <ctre/Phoenix.h>
 #include <SpeedControllerGroup.h>
 #include <Drive/DifferentialDrive.h>
+#include <ADXRS450_Gyro.h>
 #include "../RobotMap.h"
 
 #include <iostream>
@@ -32,9 +33,17 @@ public:
 
 	void getEncoderPositionInTicks(double &leftEncoder, double &rightEncoder);
 	void getEncoderVelocityInTicks(double &leftEncoder, double &rightEncoder);
+	double getAverageEncoderPositionInTicks(void);
+	double getAverageEncoderVelocityInTicks(void);
 
 	void getEncoderPositionInInches(double &leftEncoder, double &rightEncoder);
 	void getEncoderVelocityInInches(double &leftEncoder, double &rightEncoder);
+
+	void setInvertLeftEncoderReturnValue(bool bInvertLeftEncoder);
+	void setInvertRightEncoderReturnValue(bool bInvertRightEncoder);
+
+	bool IsLeftEncoderReturnValueInverted(void);
+	bool IsRightEncoderReturnValueInverted(void);
 
 	double ConvertEncoderTicksToInches(double encoderTicks);
 	double ConvertInchesToEncoderTicks(double distanceInches);
@@ -62,6 +71,18 @@ public:
 	double getWheelCircumference(void);
 	double getEncoderTicksPerInch(void);
 
+	double Gyro_GetAngle();
+	double Gyro_GetRate();
+	void Gyro_Reset();
+	void Gyro_Calibrate();
+
+	// You aren't really supposed to call this...
+	frc::ADXRS450_Gyro* pGetGyroRawPointer(void);
+
+	// Returns true if timer is running and time is
+	bool IsGyroCalibrating(void);
+
+
 private:
 	can::WPI_TalonSRX* pLeftFrontMotor;
 	can::WPI_TalonSRX* pLeftRearMotor;
@@ -73,11 +94,22 @@ private:
 
 	frc::DifferentialDrive* pRobotDrive;
 
-	double m_wheelDiameterInches;			// Is set
-	double m_encoderTicksPerRevolution;		// Is set
+	frc::ADXRS450_Gyro* m_pGyro;
+
+	// This will alow a few seconds to calibrate the gyro.
+	// When it's calibrating, you can't call anything on the gyro
+	frc::Timer* m_pGyroCalibrationTimer;
+	const double m_GYRO_CALIBRATION_COUNTDOWN_TIME = 5.0;
+	bool m_bGyroIsCalibrating;	// = false
+
+	double m_wheelDiameterInches;			// Is explicitly set
+	double m_encoderTicksPerRevolution;		// Is explicitly set
 
 	double m_DEFAULT_WHEEL_DIAMETER_INCHES = 6.0;
 	double m_DEFAULT_TICKS_PER_REVOLUTION = 1440.0;
+
+	bool m_bLeftEncoderReturnValueIsInverted;	// = false
+	bool m_bRightEncoderReturnValueIsInverted;	// = false
 
 };
 

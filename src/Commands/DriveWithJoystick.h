@@ -22,6 +22,9 @@ public:
 	// Added as a Q-n-D test the various motors Hail Mary pass at UWO
 	void DEBUG_ControllerTestMotors(void);
 
+	// If the driver A, B, X, AND Y are pressed AT THE SAME TIME, the gyro calibrates
+	void CheckForGyroCalibration(void);
+
 };
 
 #endif
