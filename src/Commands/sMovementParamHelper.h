@@ -65,6 +65,8 @@ public:
 	// Returns if invalid, watch dog, or anything else 'bad' happened
 	bool IsStateInvalid(void);
 
+	std::string getMemberStateString(void);
+
 private:
 	eMoveState m_currentState;
 	// This also checks the timer
@@ -72,6 +74,7 @@ private:
 public:
 
 	std::string TranslateStringState(eMoveState theState);
+	std::string getCurrentStateString(void);
 
 
 	// Makes sure the parameters "make sense"

@@ -35,6 +35,8 @@ public:
 	void getEncoderVelocityInTicks(double &leftEncoder, double &rightEncoder);
 	double getAverageEncoderPositionInTicks(void);
 	double getAverageEncoderVelocityInTicks(void);
+	double getAverageEncoderPositionInInches(void);
+	double getAverageEncoderVelocityInInches(void);
 
 	void getEncoderPositionInInches(double &leftEncoder, double &rightEncoder);
 	void getEncoderVelocityInInches(double &leftEncoder, double &rightEncoder);
@@ -63,13 +65,15 @@ public:
 	double DEBUG_getEncoderPositionFromMotorID( eMotorID motorID );
 	double DEBUG_getEncoderVelocityFromMotorID( eMotorID motorID );
 
-	void setWheelDiameter( double wheelDiameterInches );
-	double getWheelDiameter(void);
 	void setEncoderTicksPerRevolution( double encoderTicksPerRevolution );
 	double getEncoderTicksPerRevolution(void);
 
 	double getWheelCircumference(void);
 	double getEncoderTicksPerInch(void);
+
+	void setWheelDiameterInches(double wheelDiameterInInches);
+	double getWheelDiameterInches(void);
+
 
 	double Gyro_GetAngle();
 	double Gyro_GetRate();

@@ -107,7 +107,7 @@ void AutoBasicForwardTimerWithDelay::Execute()
 		break;
 	case IS_DRIVING:
 
-		std::cout << "Drive speed = " << this->m_speed << std::endl;
+		//std::cout << "Drive speed = " << this->m_speed << std::endl;
 		CommandBase::pDriveTrain->ArcadeDrive( this->m_speed, 0.0 );
 
 		// Done driving?

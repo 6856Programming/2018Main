@@ -35,6 +35,9 @@ void Robot::RobotInit()
 	this->m_scalePosition = Robot::UNKNOWN;				// Left or Right
 	this->m_farSwitchPosition = Robot::UNKNOWN;			// Left or Right
 
+	CommandBase::pDriveTrain->setWheelDiameterInches( 6.0 );
+	CommandBase::pDriveTrain->setEncoderTicksPerRevolution( 1440.0 );
+
 	this->ProcessGameStartUpState();
 
 
@@ -189,15 +192,24 @@ void Robot::AutonomousInit()
 	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: seconds to drive", DEFAULT_DRIVE_FORWARD_TIME);
 
 
+	// *****************************************************************************
+	// ********** THIS IS THE OG delay, then drive auto **********
 	Command* pAuto = new AutoBasicForwardTimerWithDelay(autoWaitToStartTime, autoDriveSpeed, autoDriveTime);
 	::Scheduler::GetInstance()->AddCommand( pAuto );	// double wait
+	// *****************************************************************************
 
 
-	//
+
 //	double inchesToDrive = 48.0;
 //	double maxDriveSpeed = 0.5;
 //
-//	Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
+//	sMovementParamHelper driveState(inchesToDrive, maxDriveSpeed);
+//	driveState.minSpeed = 0.5;
+//	std::cout << "Robot::AutoInit()..." << std::endl;
+//	std::cout << driveState.getMemberStateString() << std::endl;
+//
+//	//Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
+//	Command* pAuto = new AutoDriveEncoder(driveState);
 //	::Scheduler::GetInstance()->AddCommand( pAuto );
 
 

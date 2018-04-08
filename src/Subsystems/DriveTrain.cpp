@@ -181,6 +181,26 @@ double DriveTrain::getAverageEncoderVelocityInTicks(void)
 	return ( leftEncoder + rightEncoder ) / 2.0;
 }
 
+double DriveTrain::getAverageEncoderPositionInInches(void)
+{
+	double leftEncoder = 0.0;
+	double rightEncoder = 0.0;
+
+	this->getEncoderPositionInInches( leftEncoder, rightEncoder );
+
+	return ( leftEncoder + rightEncoder ) / 2.0;
+}
+
+double DriveTrain::getAverageEncoderVelocityInInches(void)
+{
+	double leftEncoder = 0.0;
+	double rightEncoder = 0.0;
+
+	this->getEncoderVelocityInInches( leftEncoder, rightEncoder );
+
+	return ( leftEncoder + rightEncoder ) / 2.0;
+}
+
 
 void DriveTrain::resetEncoder(bool bLeft, bool bRight)
 {
@@ -272,22 +292,7 @@ double DriveTrain::DEBUG_getEncoderVelocityFromMotorID( eMotorID motorID )
 }
 
 
-void DriveTrain::setWheelDiameter( double wheelDiameterInches )
-{
-	this->m_wheelDiameterInches = wheelDiameterInches;
-	return;
-}
 
-double DriveTrain::getWheelDiameter(void)
-{
-	return this->m_wheelDiameterInches;
-}
-
-void DriveTrain::setEncoderTicksPerRevolution( double encoderTicksPerRevolution )
-{
-	this->m_encoderTicksPerRevolution = encoderTicksPerRevolution;
-	return;
-}
 
 double DriveTrain::getEncoderTicksPerRevolution(void)
 {
@@ -298,6 +303,38 @@ double DriveTrain::getWheelCircumference(void)
 {
 	return M_PI * this->m_wheelDiameterInches;
 }
+
+double DriveTrain::getWheelDiameterInches(void)
+{
+	return this->m_wheelDiameterInches;
+}
+
+double DriveTrain::getEncoderTicksPerInch(void)
+{
+	return this->m_encoderTicksPerRevolution / this->getWheelCircumference();
+}
+
+
+void DriveTrain::setWheelDiameterInches(double wheelDiameterInInches)
+{
+	// Don't allow set if negative
+	if ( wheelDiameterInInches > 0.0 )
+	{
+		this->m_wheelDiameterInches = wheelDiameterInInches;
+	}
+	return;
+}
+
+void DriveTrain::setEncoderTicksPerRevolution(double encoderTicksPerRev)
+{
+	// Don't allow set if negative
+	if ( encoderTicksPerRev > 0.0 )
+	{
+		this->m_encoderTicksPerRevolution = encoderTicksPerRev;
+	}
+	return;
+}
+
 
 double DriveTrain::ConvertEncoderTicksToInches(double encoderTicks)
 {

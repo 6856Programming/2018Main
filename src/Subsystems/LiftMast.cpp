@@ -8,6 +8,10 @@
 #include "../Commands/LiftControl.h"
 #include <iostream>
 
+// Enable: button 6
+// Up: 11
+// Down: 10
+
 LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 {
 	// TODO Auto-generated constructor stub

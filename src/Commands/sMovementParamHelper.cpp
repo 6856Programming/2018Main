@@ -99,7 +99,7 @@ bool sMovementParamHelper::ValidateParameters(std::string &error)
 {
 	if (this->minSpeed >= this->maxSpeed)
 	{
-		error = "ERROR: max cruise speed is GT min drive speed";
+		error = "ERROR: min cruise speed is GTE max drive speed";
 		return false;
 	}
 
@@ -171,6 +171,12 @@ std::string sMovementParamHelper::TranslateStringState(sMovementParamHelper::eMo
 	return "Unknown State: Re-evaluate your life choices and learn to program. Geeze.";
 }
 
+std::string sMovementParamHelper::getCurrentStateString(void)
+{
+	return this->TranslateStringState(this->m_currentState);
+}
+
+
 // This is called by Init()
 void sMovementParamHelper::Start_ChangeStateToAccelerating(void)
 {
@@ -195,6 +201,8 @@ sMovementParamHelper::eMoveState sMovementParamHelper::getCurrentState(void)
 // This is called during Execute()
 double sMovementParamHelper::CalculateSpeedAndUpdateState(double currentDistance)
 {
+//	std::cout << "[sMovementParamHelper::CalculateSpeedAndUpdateState(" << currentDistance << ")] called" << std::endl;
+
 	// maxSpeed is ALWAYS positive,
 	// but totalDistance will indicate direction (+ve or -ve)
 
@@ -202,6 +210,7 @@ double sMovementParamHelper::CalculateSpeedAndUpdateState(double currentDistance
 	if ( this->m_pWatchDogKillTimer->Get() >= this->watchDogKillTimeSeconds )
 	{
 		// Sorry, you took too long, son.
+		std::cout << "WARNING: Watch dog timer timed out." << std::endl;
 		this->m_ChangeState(sMovementParamHelper::WATCH_DOG_TIMED_OUT);
 		return 0.0;
 	}
@@ -325,6 +334,31 @@ bool sMovementParamHelper::IsStateInvalid(void)
 	return false;
 }
 
+std::string sMovementParamHelper::getMemberStateString(void)
+{
+	std::stringstream ssOut;
+
+	ssOut << "--------------------------------------------------------" << std::endl;
+	ssOut << "totalDistance = " << this->totalDistance << std::endl;
+	ssOut << "maxSpeed = " << this->maxSpeed << std::endl;
+	ssOut << "minSpeed = " << this->minSpeed << std::endl;
+	ssOut << "watchDogKillTimeSeconds = " << this->watchDogKillTimeSeconds << std::endl;
+	ssOut << "overallDirection = " << this->overallDirection << std::endl;
+	ssOut << "accelPhasePercent = " << this->accelPhasePercent << std::endl;
+	ssOut << "decelPhasePercent = " << this->decelPhasePercent << std::endl;
+	ssOut << "cruisePhasePercent = " << this->cruisePhasePercent << std::endl;
+	ssOut << "current state = " << this->getCurrentStateString() << std::endl;
+	ssOut << "IsDone() = " << (this->IsDone() ? "TRUE" : "FALSE" ) << std::endl;
+	ssOut << "IsStateInvalid() = " << (this->IsStateInvalid() ? "TRUE" : "FALSE" ) << std::endl;
+	ssOut << "--Calculated values--" << std::endl;
+	ssOut << "getAccelPhaseEndDistance() = " << this->getAccelPhaseEndDistance() << std::endl;
+	ssOut << "getDecelPhaseStartDistance() = " << this->getDecelPhaseStartDistance() << std::endl;
+	ssOut << "getDecelPhaseDistance() = " << this->getDecelPhaseDistance() << std::endl;
+	ssOut << "getCruizePhaseDistance() = " << this->getCruizePhaseDistance() << std::endl;
+	ssOut << "--------------------------------------------------------" << std::endl;
+
+	return ssOut.str();
+}
 
 
 
