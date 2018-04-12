@@ -30,6 +30,9 @@ void DriveWithJoystick::Initialize()
 {
 	std::cout << "[DriveWithJoystick] Initialized" << std::endl;
 
+	std::cout << "DriveWithJoystick::Initialize(): Resetting Gyro" << std::endl;
+	CommandBase::pDriveTrain->Gyro_Reset();
+
 	return;
 }
 
@@ -62,6 +65,7 @@ void DriveWithJoystick::Execute()
 //	// ***************************************************************
 //
 //	this->DEBUG_ControllerTestMotors();
+//	this->CheckForGyroCalibration();
 //
 //	// ***************************************************************
 
@@ -102,17 +106,22 @@ void DriveWithJoystick::Execute()
 	::SmartDashboard::PutNumber("Right Encoder", rightEncoder);
 
 	// In case the encoders are connected to the wrong Talons...
-	DriveTrain* pDT = ::CommandBase::pDriveTrain;
+//	DriveTrain* pDT = ::CommandBase::pDriveTrain;
 
-	::SmartDashboard::PutNumber( "DEBUG: LeftFront Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::LEFT_FRONT) );
-	::SmartDashboard::PutNumber( "DEBUG: RightFront Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::RIGHT_FRONT) );
-	::SmartDashboard::PutNumber( "DEBUG: LeftRear Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::LEFT_REAR) );
-	::SmartDashboard::PutNumber( "DEBUG: RightRear Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::RIGHT_REAR) );
+//	::SmartDashboard::PutNumber( "DEBUG: LeftFront Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::LEFT_FRONT) );
+//	::SmartDashboard::PutNumber( "DEBUG: RightFront Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::RIGHT_FRONT) );
+//	::SmartDashboard::PutNumber( "DEBUG: LeftRear Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::LEFT_REAR) );
+//	::SmartDashboard::PutNumber( "DEBUG: RightRear Position", pDT->DEBUG_getEncoderPositionFromMotorID(DriveTrain::RIGHT_REAR) );
+//
+//	::SmartDashboard::PutNumber( "DEBUG: LeftFront Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::LEFT_FRONT) );
+//	::SmartDashboard::PutNumber( "DEBUG: RightFront Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_FRONT) );
+//	::SmartDashboard::PutNumber( "DEBUG: LeftRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::LEFT_REAR) );
+//	::SmartDashboard::PutNumber( "DEBUG: RightRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_REAR) );
 
-	::SmartDashboard::PutNumber( "DEBUG: LeftFront Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::LEFT_FRONT) );
-	::SmartDashboard::PutNumber( "DEBUG: RightFront Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_FRONT) );
-	::SmartDashboard::PutNumber( "DEBUG: LeftRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::LEFT_REAR) );
-	::SmartDashboard::PutNumber( "DEBUG: RightRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_REAR) );
+
+	double currentDirection = CommandBase::pDriveTrain->Gyro_GetAngle();
+	::SmartDashboard::PutNumber("Gyro Angle", currentDirection);
+
 
 	return;
 }

@@ -5,7 +5,6 @@
 #include <iostream>
 #include <WPILib.h>
 #include "../CommandBase.h"
-#include "MyAutoCommand.h"
 
 /**
  *

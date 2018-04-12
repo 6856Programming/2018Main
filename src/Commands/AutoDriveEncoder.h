@@ -5,15 +5,14 @@
 #include <iostream>
 #include <WPILib.h>
 #include "../CommandBase.h"
-#include "MyAutoCommand.h"
 
 
 class AutoDriveEncoder: public CommandBase
 {
 public:
 
-	AutoDriveEncoder( double inchesToDrive, double speed );
-	AutoDriveEncoder( sMovementParamHelper moveParams );
+	AutoDriveEncoder( double inchesToDrive, double speed, bool bUseGyroToDriveStraight = true );
+	AutoDriveEncoder( sMovementParamHelper moveParams, bool bUseGyroToDriveStraight = true );
 	virtual ~AutoDriveEncoder();
 	void Initialize() override;
 	void Execute() override;
@@ -26,10 +25,10 @@ private:
 	// This has all the 'brains' of the movement
 	sMovementParamHelper m_MovementState;
 
+	bool m_bUseGyroToDriveStraight;
+
 	// Can't call c'tor
 	AutoDriveEncoder();
-
-
 
 };
 

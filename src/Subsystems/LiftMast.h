@@ -47,15 +47,14 @@ public:
 
 
 
-	bool getBottomLimitSwitch(void);
-	bool getTopLimitSwitchStatus(void);
+//	bool getBottomLimitSwitch(void);
+//	bool getTopLimitSwitchStatus(void);
 
 private:
-	frc::DigitalInput* m_pLimitSwitchBottom;	// On DIO pins 2 & 3
-	frc::DigitalInput*m_pLimitSwitchTop;
+//	frc::DigitalInput* m_pLimitSwitchBottom;	// On DIO pins 2 & 3
+//	frc::DigitalInput*m_pLimitSwitchTop;
 
 
-	//Looking at code from DriveTrain.h
 	can::WPI_TalonSRX* m_pLiftMotor;
 
 

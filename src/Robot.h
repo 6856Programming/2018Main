@@ -7,8 +7,8 @@
 #include <Commands/Scheduler.h>
 #include <Commands/WaitCommand.h>
 #include "Commands/DriveWithJoystick.h"
-#include "Commands/ExampleCommand.h"
-#include "Commands/MyAutoCommand.h"
+//#include "Commands/ExampleCommand.h"
+//#include "Commands/MyAutoCommand.h"
 #include <LiveWindow/LiveWindow.h>
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>

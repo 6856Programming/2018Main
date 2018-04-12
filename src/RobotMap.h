@@ -35,14 +35,6 @@ const double GRIPPER_INTAKE_PLUSED_MODE_MOTOR_SPEED = 0.90;
 // How fast the intake motors spin when shooting
 const double GRIPPER_SHOOT_PLUSED_MODE_MOTOR_SPEED = 0.80;
 
-// The maximum speed the claw can move
-//const double CLAW_MOVEMENT_SPEED_MAX = 0.3;
-//const double CLAW_CLOSE_SPEED = 0.05;
-//
-//const double CLAW_OPEN_SHUT_OFF_TIME = 1;
-//
-//const double CLAW_OPEN_SPEED = 0.05;
-//const double CLAW_OPEN_AND_SHOOT_SPEED = 0.1;
 
 const int JOYSTICK_OPEN_BUTTON_ID = 4;
 //const int JOYSTICK_OPEN_AND_SHOOT_BUTTON_ID = 3;
@@ -50,13 +42,6 @@ const int JOYSTICK_IDLE_BUTTON_ID = 3;
 const int JOYSTICK_CLOSE_BUTTON_ID = 5;
 
 
-const int LIFT_MAST_UPPER_CONTACT_SWITCH = 2;
-const int LIFT_MAST_LOWER_CONTACT_SWITCH = 3;
-
-const int FORK_WHEELS_CONTACT_INPUT = 2;
-
-
-const double WHEEL_RADIUS = 3.0;
 
 //XBox Controller
 const int XBOX_CONTROLLER_DRIVE_PORT = 0;
@@ -75,7 +60,19 @@ const double TURN_SLOW_SPEED_RATIO = .55;
 //const int PNEUMATIC_CONTROL_FORWARD_CHANNEL = 0;
 //const int PNEUMATIC_CONTROL_REVERSE_CHANNEL = 1;
 
+//const int LIFT_MAST_UPPER_CONTACT_SWITCH = 2;
+//const int LIFT_MAST_LOWER_CONTACT_SWITCH = 3;
+//const int FORK_WHEELS_CONTACT_INPUT = 2;
+//const double WHEEL_RADIUS = 3.0;
 
+// The maximum speed the claw can move
+//const double CLAW_MOVEMENT_SPEED_MAX = 0.3;
+//const double CLAW_CLOSE_SPEED = 0.05;
+//
+//const double CLAW_OPEN_SHUT_OFF_TIME = 1;
+//
+//const double CLAW_OPEN_SPEED = 0.05;
+//const double CLAW_OPEN_AND_SHOOT_SPEED = 0.1;
 
 #endif
 

@@ -1,6 +1,0 @@
-#include "AutoQnDScale.h"
-
-
-
-
-

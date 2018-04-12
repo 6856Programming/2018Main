@@ -110,7 +110,8 @@ private:
 	double m_encoderTicksPerRevolution;		// Is explicitly set
 
 	double m_DEFAULT_WHEEL_DIAMETER_INCHES = 6.0;
-	double m_DEFAULT_TICKS_PER_REVOLUTION = 1440.0;
+	// With a ticks per revolution of 1440.0, asking for 48", we really drove 70"
+	double m_DEFAULT_TICKS_PER_REVOLUTION = 1440.0 * (48.0/70.0);
 
 	bool m_bLeftEncoderReturnValueIsInverted;	// = false
 	bool m_bRightEncoderReturnValueIsInverted;	// = false

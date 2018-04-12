@@ -2,13 +2,23 @@
 
 
 
-AutoDriveEncoder::AutoDriveEncoder(double inchesToDrive, double speed)
+AutoDriveEncoder::AutoDriveEncoder(double inchesToDrive, double speed, bool bUseGyroToDriveStraight)
 {
-//	std::cout << "AutoDriveEncoder..." << std::endl;
+	std::cout << "[AutoDriveEncoder()]"
+		<< " distance = " << inchesToDrive
+		<< ", speed = " << speed
+		<< (bUseGyroToDriveStraight ? " (using gyro to assist)" : "" ) << std::endl;
 //	std::cout << this->m_MovementState.getMemberStateString() << std::endl;
 	this->m_MovementState = sMovementParamHelper(inchesToDrive, speed);
 //	std::cout << this->m_MovementState.getMemberStateString() << std::endl;
 
+	this->m_bUseGyroToDriveStraight = bUseGyroToDriveStraight;
+
+	if ( this->m_bUseGyroToDriveStraight )
+	{
+		CommandBase::pDriveTrain->Gyro_Reset();
+	}
+/*
 	std::string error = "";
 	if ( ! this->m_MovementState.ValidateParameters(error) )
 	{
@@ -21,18 +31,28 @@ AutoDriveEncoder::AutoDriveEncoder(double inchesToDrive, double speed)
 	{
 		std::cout << "[AutoDriveEncoder] created. Values are OK." << std::endl;
 	}
-
+*/
 	return;
 }
 
-AutoDriveEncoder::AutoDriveEncoder( sMovementParamHelper moveParams )
+AutoDriveEncoder::AutoDriveEncoder( sMovementParamHelper moveParams, bool bUseGyroToDriveStraight )
 {
-//	std::cout << "AutoDriveEncoder..." << std::endl;
-//	std::cout << this->m_MovementState.getMemberStateString() << std::endl;
+	std::cout << "[AutoDriveEncoder()]"
+		<< " distance = " << moveParams.totalDistance
+		<< ", speed = " << moveParams.maxSpeed
+		<< (bUseGyroToDriveStraight ? " (using gyro to assist)" : "" ) << std::endl;
+
+	//	std::cout << this->m_MovementState.getMemberStateString() << std::endl;
 	this->m_MovementState = moveParams;
 //	std::cout << this->m_MovementState.getMemberStateString() << std::endl;
 
+	this->m_bUseGyroToDriveStraight = bUseGyroToDriveStraight;
 
+	if ( this->m_bUseGyroToDriveStraight )
+	{
+		CommandBase::pDriveTrain->Gyro_Reset();
+	}
+/*
 	std::string error = "";
 	if ( ! this->m_MovementState.ValidateParameters(error) )
 	{
@@ -45,6 +65,7 @@ AutoDriveEncoder::AutoDriveEncoder( sMovementParamHelper moveParams )
 	{
 		std::cout << "[AutoDriveEncoder] created. Values are OK." << std::endl;
 	}
+*/
 
 	return;
 }
@@ -68,7 +89,7 @@ void AutoDriveEncoder::Initialize()
 //	std::cout << this->m_MovementState.getMemberStateString() << std::endl;
 
 	std::cout << "Wheel diam = " << CommandBase::pDriveTrain->getWheelDiameterInches() << std::endl;
-	std::cout << "Whell cir = " << CommandBase::pDriveTrain->getWheelCircumference() << std::endl;
+	std::cout << "Wheel cir = " << CommandBase::pDriveTrain->getWheelCircumference() << std::endl;
 	std::cout << "EncoderTicksPerInch: " << CommandBase::pDriveTrain->getEncoderTicksPerInch() << std::endl;
 	std::cout << "EncoderTicksPerRev: " << CommandBase::pDriveTrain->getEncoderTicksPerRevolution() << std::endl;
 
@@ -82,19 +103,72 @@ void AutoDriveEncoder::Execute()
 	// Get current encoder values
 	double currentDistance = CommandBase::pDriveTrain->getAverageEncoderPositionInInches();
 
-	double speed = this->m_MovementState.CalculateSpeedAndUpdateState( currentDistance );
+	// Using the ArcadeDrive (as suggested by the FRC example), caused the robot
+	//  to violently jerk right and left, so we are using TankDrive, instead
+	double leftSpeed = this->m_MovementState.CalculateSpeedAndUpdateState( currentDistance );
+	double rightSpeed = leftSpeed;
 
-	double leftEncoder = 0.0;
-	double rightEncoder = 0.0;
+	{
+		double leftEncoder = 0.0;
+		double rightEncoder = 0.0;
 
-	CommandBase::pDriveTrain->getEncoderPositionInInches( leftEncoder, rightEncoder );
+		CommandBase::pDriveTrain->getEncoderPositionInInches( leftEncoder, rightEncoder );
+		std::cout
+			<< "AutoDriveEncoder:Current state = " << this->m_MovementState.getCurrentStateString()
+			<< ", speed L:R = " << leftSpeed << ":" << rightSpeed
+			<< ", L,R, avg enc = " << leftEncoder << ", " << rightEncoder << ", " << currentDistance << std::endl;
+	}
 
-	std::cout
-		<< "AutoDriveEncoder:Current state = " << this->m_MovementState.getCurrentStateString()
-		<< ", speed calculated = " << speed
-		<< ", L,R enc = " << leftEncoder << ", " << rightEncoder << std::endl;
 
-	CommandBase::pDriveTrain->ArcadeDrive( speed, 0.0 );
+
+	if ( this->m_bUseGyroToDriveStraight )
+	{
+		double angleAdjust = CommandBase::pDriveTrain->Gyro_GetAngle();
+
+		// The angle that is returned could be very large,
+		//  particularly since the max speed range is [-1.0, +1.0]
+		// These two variables:
+		// - Clamp the max angle to something sensible
+		//   (remember that the robot is more or less straight,
+		//    to the angles SHOULD be small; if not, something
+		//    is very wrong with the world... gyro broken?)
+		// - The speed is slightly adjusted based on this returned
+		//    angle, but even small angles, like 3 degrees, are
+		//    WAY larger than the maximum speed.
+		//
+		// NOTE: We have to invert the values if the robot
+		//   overall direction is -ve vs +ve.
+
+		const double MAX_CLAMP_ANGLE_FROM_GRYRO = 5.0;
+
+		if ( angleAdjust > MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = MAX_CLAMP_ANGLE_FROM_GRYRO; }
+		if ( angleAdjust < -MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = -MAX_CLAMP_ANGLE_FROM_GRYRO;}
+
+
+		const double CRAPPY_ANGLE_TO_SPEED_ADJUST_RATIO = 0.1;
+
+		angleAdjust *= CRAPPY_ANGLE_TO_SPEED_ADJUST_RATIO;
+
+		if ( this->m_MovementState.overallDirection > 0 )
+		{
+			// Moving "forward"
+			leftSpeed -= angleAdjust;
+			rightSpeed += angleAdjust;
+		}
+		else if ( this->m_MovementState.overallDirection < 0 )
+		{
+			// Moving "backward"
+			leftSpeed += angleAdjust;
+			rightSpeed -= angleAdjust;
+		}
+		// Else: this shouldn't happen (overallDirection == 0)
+
+	}// if ( this->m_bUseGyroToDriveStraight )
+
+	// Using the ArcadeDrive (as suggested by the FRC example), caused the robot
+	//  to violently jerk right and left, so we are using TankDrive, instead
+//	CommandBase::pDriveTrain->ArcadeDrive( speed, -angleAdjust );
+	CommandBase::pDriveTrain->TankDrive( leftSpeed, rightSpeed );
 
 	return;
 }

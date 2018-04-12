@@ -180,13 +180,14 @@ std::string sMovementParamHelper::getCurrentStateString(void)
 // This is called by Init()
 void sMovementParamHelper::Start_ChangeStateToAccelerating(void)
 {
+	this->ValidateParameters();
+
 	// This can only be called when we are waiting to start
 	if (this->m_currentState == IS_WAITING_TO_START)
 	{
-		this->m_currentState = IS_ACCELERATING;
+		this->m_ChangeState(IS_ACCELERATING);
 	}
 
-	this->ValidateParameters();
 
 	this->m_pWatchDogKillTimer->Start();
 
@@ -202,6 +203,13 @@ sMovementParamHelper::eMoveState sMovementParamHelper::getCurrentState(void)
 double sMovementParamHelper::CalculateSpeedAndUpdateState(double currentDistance)
 {
 //	std::cout << "[sMovementParamHelper::CalculateSpeedAndUpdateState(" << currentDistance << ")] called" << std::endl;
+
+	if ( ! this->ValidateParameters() )
+	{
+		std::cout << "WARNING: Invalid movement state detected in CalculateSpeedAndUpdateState() call" << std::endl;
+		this->m_currentState = sMovementParamHelper::INVALID_STATE;
+		return 0.0;
+	}
 
 	// maxSpeed is ALWAYS positive,
 	// but totalDistance will indicate direction (+ve or -ve)
@@ -307,7 +315,7 @@ void sMovementParamHelper::m_ChangeState(sMovementParamHelper::eMoveState newSta
 	if ( bLogToConsole )
 	{
 		std::stringstream ssMessage;
-		ssMessage << "AutoDriveEncoder() changing state to " << this->TranslateStringState(this->m_currentState);
+		ssMessage << "sMovementParamHelper changing state to " << this->TranslateStringState(this->m_currentState);
 		std::cout << ssMessage.str() << std::endl;
 	}
 	return;

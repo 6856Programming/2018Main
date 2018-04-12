@@ -4,8 +4,9 @@
 #include "Robot.h"
 
 #include "Commands/AutonomousGripper.h"
-#include "Commands/AutonomousRotateGyro.h"
+//#include "Commands/AutonomousRotateGyro.h"
 #include "Commands/AutoDriveEncoder.h"
+#include "Commands/AutoTurnGyro.h"
 
 
 Robot::~Robot()
@@ -38,8 +39,13 @@ void Robot::RobotInit()
 	CommandBase::pDriveTrain->setWheelDiameterInches( 6.0 );
 	CommandBase::pDriveTrain->setEncoderTicksPerRevolution( 1440.0 );
 
+	CommandBase::pDriveTrain->setInvertLeftEncoderReturnValue(false);
+	CommandBase::pDriveTrain->setInvertRightEncoderReturnValue(true);
+
 	this->ProcessGameStartUpState();
 
+	std::cout << "Robot::RobotInit(): Resetting Gyro" << std::endl;
+	CommandBase::pDriveTrain->Gyro_Reset();
 
 	return;
 }
@@ -187,31 +193,47 @@ void Robot::AutonomousInit()
 	// For now, use the Quick-n-Dirty AutoBasicForwardTimerWithDelay() command
 
 
-	double autoWaitToStartTime = ::SmartDashboard::GetNumber("AUTO: seconds to wait to start driving", DEFAULT_WAIT_TO_START_TIME);
-	double autoDriveSpeed = ::SmartDashboard::GetNumber("AUTO: drive speed", DEFAULT_DRIVE_SPEED);
-	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: seconds to drive", DEFAULT_DRIVE_FORWARD_TIME);
-
-
-	// *****************************************************************************
-	// ********** THIS IS THE OG delay, then drive auto **********
-	Command* pAuto = new AutoBasicForwardTimerWithDelay(autoWaitToStartTime, autoDriveSpeed, autoDriveTime);
-	::Scheduler::GetInstance()->AddCommand( pAuto );	// double wait
-	// *****************************************************************************
-
-
-
-//	double inchesToDrive = 48.0;
-//	double maxDriveSpeed = 0.5;
+//	// *****************************************************************************
+//	// ********** THIS IS THE OG delay, then drive auto **********
 //
-//	sMovementParamHelper driveState(inchesToDrive, maxDriveSpeed);
-//	driveState.minSpeed = 0.5;
-//	std::cout << "Robot::AutoInit()..." << std::endl;
-//	std::cout << driveState.getMemberStateString() << std::endl;
+//	double autoWaitToStartTime = ::SmartDashboard::GetNumber("AUTO: seconds to wait to start driving", DEFAULT_WAIT_TO_START_TIME);
+//	double autoDriveSpeed = ::SmartDashboard::GetNumber("AUTO: drive speed", DEFAULT_DRIVE_SPEED);
+//	double autoDriveTime = ::SmartDashboard::GetNumber("AUTO: seconds to drive", DEFAULT_DRIVE_FORWARD_TIME);
 //
-//	//Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
-//	Command* pAuto = new AutoDriveEncoder(driveState);
-//	::Scheduler::GetInstance()->AddCommand( pAuto );
+//	Command* pAuto = new AutoBasicForwardTimerWithDelay(autoWaitToStartTime, autoDriveSpeed, autoDriveTime);
+//	::Scheduler::GetInstance()->AddCommand( pAuto );	// double wait
+//	// *****************************************************************************
 
+
+	{
+		// 48 inches actually moves it 70 inches (more or less)
+		double inchesToDrive = 48.0;
+		double maxDriveSpeed = 0.7;
+
+		sMovementParamHelper driveState(inchesToDrive, maxDriveSpeed);
+		driveState.minSpeed = 0.5;
+		std::cout << "Robot::AutoInit()..." << std::endl;
+		std::cout << driveState.getMemberStateString() << std::endl;
+
+		//Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
+		Command* pAuto = new AutoDriveEncoder(driveState, true);
+		::Scheduler::GetInstance()->AddCommand( pAuto );
+	}
+
+	{
+		sMovementParamHelper driveState;
+		driveState.totalDistance = 90.0;		// Degrees
+		driveState.maxSpeed = 0.6;
+		driveState.minSpeed = 0.5;
+		driveState.decelPhasePercent = .20;		// At 10%, it overshot
+
+		std::cout << "Robot::AutoInit()..." << std::endl;
+		std::cout << driveState.getMemberStateString() << std::endl;
+
+		//Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
+		Command* pAuto = new AutoTurnGyro(driveState);
+		::Scheduler::GetInstance()->AddCommand( pAuto );
+	}
 
 	return;
 }

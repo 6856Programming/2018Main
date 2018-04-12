@@ -169,14 +169,14 @@ void Gripper::PulseIntake(double speed, double time)
 // These are NOT timed, but simply move the claw open and closed
 void Gripper::ClawOpen(void)
 {
-	::SmartDashboard::PutNumber( "ClawOpen(): speed is", this->m_CLAW_MAX_MOVEMENT_SPEED );
+//	::SmartDashboard::PutNumber( "ClawOpen(): speed is", this->m_CLAW_MAX_MOVEMENT_SPEED );
 	this->m_pClawMotor->Set( this->m_CLAW_MAX_MOVEMENT_SPEED );
 	return;
 }
 
 void Gripper::ClawClose(void)
 {
-	::SmartDashboard::PutNumber( "ClawOpen(): speed is", -this->m_CLAW_MAX_MOVEMENT_SPEED );
+//	::SmartDashboard::PutNumber( "ClawOpen(): speed is", -this->m_CLAW_MAX_MOVEMENT_SPEED );
 	this->m_pClawMotor->Set( -this->m_CLAW_MAX_MOVEMENT_SPEED );
 	return;
 }
@@ -193,8 +193,8 @@ void Gripper::ClawStop(void)
 // (i.e. call from Execute() or IsFinished())
 void Gripper::UpdateState(void)
 {
-	::SmartDashboard::PutBoolean( "Gripper Open Limit", this->isClawOpenLimitSwitchPushed() );
-	::SmartDashboard::PutBoolean( "Gripper Closed Limit",this->isClawClosedLimitSwitchPushed() );
+//	::SmartDashboard::PutBoolean( "Gripper Open Limit", this->isClawOpenLimitSwitchPushed() );
+//	::SmartDashboard::PutBoolean( "Gripper Closed Limit",this->isClawClosedLimitSwitchPushed() );
 
 	// Are we in "Pulsed Intake" mode?
 	if ( this->m_bPulsedIntakeModeOn )

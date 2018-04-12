@@ -45,6 +45,9 @@ DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 
 	this->m_bGyroIsCalibrating = false;
 
+	this->m_bLeftEncoderReturnValueIsInverted = false;
+	this->m_bRightEncoderReturnValueIsInverted = false;
+
 
 	return;
 }
@@ -338,7 +341,7 @@ void DriveTrain::setEncoderTicksPerRevolution(double encoderTicksPerRev)
 
 double DriveTrain::ConvertEncoderTicksToInches(double encoderTicks)
 {
-	return ( this->m_encoderTicksPerRevolution / this->getWheelCircumference() ) * encoderTicks;
+	return ( encoderTicks / this->m_encoderTicksPerRevolution ) * this->getWheelCircumference();
 }
 
 double DriveTrain::ConvertInchesToEncoderTicks(double distanceInches)

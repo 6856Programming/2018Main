@@ -11,7 +11,6 @@
 #include <iostream>
 #include <WPILib.h>
 #include "../CommandBase.h"
-#include "MyAutoCommand.h"
 
 class AutonomousMast: public CommandBase
 {
