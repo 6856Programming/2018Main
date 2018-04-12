@@ -33,7 +33,7 @@ public:
 	void ClawClose(void);
 	void ClawStop(void);
 private:
-	const double m_CLAW_MAX_MOVEMENT_SPEED = 0.5;
+	const double m_CLAW_MAX_MOVEMENT_SPEED = 0.3;
 public:
 
 	void Idle(void);

@@ -152,8 +152,8 @@ void AutoDriveEncoder::Execute()
 		if ( this->m_MovementState.overallDirection > 0 )
 		{
 			// Moving "forward"
-			leftSpeed -= angleAdjust;
-			rightSpeed += angleAdjust;
+			leftSpeed += angleAdjust;
+			rightSpeed -= angleAdjust;
 		}
 		else if ( this->m_MovementState.overallDirection < 0 )
 		{

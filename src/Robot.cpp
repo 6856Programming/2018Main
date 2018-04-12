@@ -8,6 +8,9 @@
 #include "Commands/AutoDriveEncoder.h"
 #include "Commands/AutoTurnGyro.h"
 
+// Auto command groups
+#include "Commands/Autonomous/cAutoCG_ScratchPad.h"	// Quick-n-Dirty test command group
+
 
 Robot::~Robot()
 {
@@ -205,35 +208,11 @@ void Robot::AutonomousInit()
 //	// *****************************************************************************
 
 
-	{
-		// 48 inches actually moves it 70 inches (more or less)
-		double inchesToDrive = 48.0;
-		double maxDriveSpeed = 0.7;
 
-		sMovementParamHelper driveState(inchesToDrive, maxDriveSpeed);
-		driveState.minSpeed = 0.5;
-		std::cout << "Robot::AutoInit()..." << std::endl;
-		std::cout << driveState.getMemberStateString() << std::endl;
 
-		//Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
-		Command* pAuto = new AutoDriveEncoder(driveState, true);
-		::Scheduler::GetInstance()->AddCommand( pAuto );
-	}
+	::Scheduler::GetInstance()->AddCommand( new cAutoCG_ScratchPad() );
 
-	{
-		sMovementParamHelper driveState;
-		driveState.totalDistance = 90.0;		// Degrees
-		driveState.maxSpeed = 0.6;
-		driveState.minSpeed = 0.5;
-		driveState.decelPhasePercent = .20;		// At 10%, it overshot
 
-		std::cout << "Robot::AutoInit()..." << std::endl;
-		std::cout << driveState.getMemberStateString() << std::endl;
-
-		//Command* pAuto = new AutoDriveEncoder(inchesToDrive, maxDriveSpeed);
-		Command* pAuto = new AutoTurnGyro(driveState);
-		::Scheduler::GetInstance()->AddCommand( pAuto );
-	}
 
 	return;
 }
