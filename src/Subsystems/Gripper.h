@@ -32,8 +32,10 @@ public:
 	void ClawOpen(void);
 	void ClawClose(void);
 	void ClawStop(void);
+
+
 private:
-	const double m_CLAW_MAX_MOVEMENT_SPEED = 0.3;
+	const double m_CLAW_MAX_MOVEMENT_SPEED = 0.65;
 public:
 
 	void Idle(void);
@@ -44,6 +46,7 @@ public:
 	// Each time it's called, the timer resets.
 	void PulseIntake(double speed, double time);
 
+	bool isPulseIntakeOnRightNow(void);
 
 	bool isClawOpenLimitSwitchPushed(void);
 	bool isClawClosedLimitSwitchPushed(void);

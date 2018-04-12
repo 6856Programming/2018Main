@@ -37,17 +37,19 @@ cAutoCG_ScratchPad::cAutoCG_ScratchPad()
 		// 48 inches actually moves it 70 inches (more or less)
 		sMovementParamHelper driveState;
 
-		driveState.totalDistance = ::SmartDashboard::GetNumber("AutoDriveEncoder():Distance to drive", 48.0);
+//		driveState.totalDistance = ::SmartDashboard::GetNumber("AutoDriveEncoder():Distance to drive", 48.0);
+//		driveState.totalDistance = ::SmartDashboard::GetNumber("AutoDriveEncoder():Distance to drive", 21.5 * 12.0);
+		driveState.totalDistance = ::SmartDashboard::GetNumber("AutoDriveEncoder():Distance to drive", 15.0 * 12.0);
 		::SmartDashboard::PutNumber("AutoDriveEncoder():Distance to drive", driveState.totalDistance);
 
-		driveState.maxSpeed = ::SmartDashboard::GetNumber("AutoDriveEncoder():maxDriveSpeed", 0.7);
+		driveState.maxSpeed = ::SmartDashboard::GetNumber("AutoDriveEncoder():maxDriveSpeed", 0.6);
 		::SmartDashboard::PutNumber("AutoDriveEncoder():maxDriveSpeed", driveState.maxSpeed);
 
 		driveState.accelPhasePercent = ::SmartDashboard::GetNumber("AutoDriveEncoder():accelPhasePercent", 0.1);
 		::SmartDashboard::PutNumber("AutoDriveEncoder():accelPhasePercent", driveState.accelPhasePercent);
 		driveState.accelPhasePercent = 0.10;
-		driveState.cruisePhasePercent = 0.70;
-		driveState.decelPhasePercent = 0.20;
+		driveState.cruisePhasePercent = 0.80;
+		driveState.decelPhasePercent = 0.1;
 		driveState.minSpeed = 0.4;
 
 		std::cout << driveState.getMemberStateString() << std::endl;
@@ -76,12 +78,12 @@ cAutoCG_ScratchPad::cAutoCG_ScratchPad()
 
 	{	// Turn -45 degrees
 		sMovementParamHelper driveState;
-		driveState.totalDistance = -45.0;		// Degrees
+		driveState.totalDistance = 45.0;		// Degrees
 		driveState.maxSpeed = 0.65;
 		driveState.minSpeed = 0.6;
-		driveState.accelPhasePercent = 0.10;
-		driveState.cruisePhasePercent = 0.70;
-		driveState.decelPhasePercent = 0.20;		// At 10%, it overshot
+		driveState.accelPhasePercent = 0.30;
+		driveState.cruisePhasePercent = 0.40;
+		driveState.decelPhasePercent = 0.30;		// At 10%, it overshot
 
 		std::cout << driveState.getMemberStateString() << std::endl;
 

@@ -14,12 +14,22 @@ public:
 	// but totalDistance will indicate direction (+ve or -ve)
 	sMovementParamHelper(double totalDistance, double maxSpeed);
 
+	// Profile is based on percentages, so this is used to calculate
+	//	based on distances, instead - i.e. converts distance to percents.
+	// Note: abs(accelDistance) + abs(decelDistance) must be LTE abs(totalDistanceInches)
+	// Note: all the directions have to be the same direction
+	// (otherwise does NOT update and returns true)
+	bool RecalculateProfileFromDistances( double totalDistanceInches, double accelDistance, double decelDistance );
+
 	// This is called by Init()
 	void Start_ChangeStateToAccelerating(void);
 	// This is called during Execute()
 	// NOTE: currentDistance can be -ve, i.e. it is the REAL encoder-gyro reading.
 	// Returned speed is the ACTUAL motor speed (i.e. is -ve or +ve)
 	double CalculateSpeedAndUpdateState(double currentDistance);
+
+	// Returns -1 or +1. 0 is +ve
+	bool NormalizeGetSign(double number);
 
 
 	double totalDistance;

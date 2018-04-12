@@ -105,6 +105,7 @@ void DriveWithJoystick::Execute()
 	::SmartDashboard::PutNumber("Left Encoder", leftEncoder);
 	::SmartDashboard::PutNumber("Right Encoder", rightEncoder);
 
+
 	// In case the encoders are connected to the wrong Talons...
 //	DriveTrain* pDT = ::CommandBase::pDriveTrain;
 

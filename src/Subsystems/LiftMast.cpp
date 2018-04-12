@@ -19,6 +19,8 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 
 	this->m_pLiftMotor = new can::WPI_TalonSRX(LIFTER_MOTOR_ID);
 
+	this->m_pLimitSwitchUpper = new frc::DigitalInput(LIFT_MAST_UPPER_LIMIT_SWITCH_READY_TO_SHOOT_SCALE_POSITION);
+
 //	this->m_pLimitSwitchTop = new frc::DigitalInput(LIFT_MAST_UPPER_CONTACT_SWITCH);
 //	this->m_pLimitSwitchBottom = new frc::DigitalInput(LIFT_MAST_LOWER_CONTACT_SWITCH);
 
@@ -29,12 +31,12 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 //{
 //	return this->m_pLimitSwitchBottom->Get();
 //}
-//
-//bool LiftMast::getTopLimitSwitchStatus(void)
-//{
-//	return this->m_pLimitSwitchTop->Get();
-//}
 
+bool LiftMast::getUpperLimitSwitchStatus(void)
+{
+	return this->m_pLimitSwitchUpper->Get();
+}
+//
 
 void LiftMast::DEBUG_SetMotorSpeed(double speed)
 {

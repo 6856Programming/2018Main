@@ -166,6 +166,12 @@ void Gripper::PulseIntake(double speed, double time)
 	return;
 }
 
+bool Gripper::isPulseIntakeOnRightNow(void)
+{
+	return this->m_bPulsedIntakeModeOn;
+}
+
+
 // These are NOT timed, but simply move the claw open and closed
 void Gripper::ClawOpen(void)
 {

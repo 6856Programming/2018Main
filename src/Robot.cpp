@@ -3,7 +3,7 @@
 #include <Commands/Waiter.h>
 #include "Robot.h"
 
-#include "Commands/AutonomousGripper.h"
+//#include "Commands/AutonomousGripper.h"
 //#include "Commands/AutonomousRotateGyro.h"
 #include "Commands/AutoDriveEncoder.h"
 #include "Commands/AutoTurnGyro.h"

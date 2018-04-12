@@ -368,6 +368,47 @@ std::string sMovementParamHelper::getMemberStateString(void)
 	return ssOut.str();
 }
 
+// Profile is based on percentages, so this is used to calculate
+//	based on distances, instead - i.e. converts distance to percents.
+// abs(accelDistance) + abs(decelDistance) must be LTE abs(totalDistanceInches)
+// (otherwise does NOT update and returns true)
+bool sMovementParamHelper::RecalculateProfileFromDistances( double totalDistanceInches, double accelDistance, double decelDistance )
+{
+	// Do the values add up
+	if ( fabs(accelDistance) + fabs(decelDistance) > fabs(totalDistanceInches) )
+	{
+		return false;
+	}
+
+	// Are they all in the same direction
+	if ( this->NormalizeGetSign(totalDistance) != this->NormalizeGetSign(accelDistance) )
+	{
+		return false;
+	}
+	if ( this->NormalizeGetSign(totalDistance) != this->NormalizeGetSign(decelDistance) )
+	{
+		return false;
+	}
+	// We should be good, but let's also check the accel and decel. I mean, why not? YOLO.
+	if ( this->NormalizeGetSign(accelDistance) != this->NormalizeGetSign(decelDistance) )
+	{
+		return false;
+	}
+
+	// Calculate and update values
+	this->totalDistance = totalDistanceInches;
+	this->accelPhasePercent = fabs(accelDistance) / fabs(totalDistanceInches);
+	this->decelPhasePercent = fabs(decelDistance) / fabs(totalDistanceInches);
+	this->cruisePhasePercent = 1.0 - fabs(this->accelPhasePercent) - fabs(this->decelPhasePercent);
+
+	return this->ValidateParameters();
+}
+
+// Returns -1 or +1. 0 is +ve
+bool sMovementParamHelper::NormalizeGetSign(double number)
+{
+	return ( number < 0.0 ? -1.0 : 1.0 );
+}
 
 
 

@@ -65,6 +65,11 @@ void LiftControl::Execute()
 
 	::CommandBase::pLiftMast->DEBUG_SetMotorSpeed(liftSpeedAndDirection);
 
+
+	// Show limit switch state
+	::SmartDashboard::PutString("Upper Limit Switch",
+	                            ::CommandBase::pLiftMast->getUpperLimitSwitchStatus() ? "OPEN" : "CLOSED" );
+
 	return;
 }
 

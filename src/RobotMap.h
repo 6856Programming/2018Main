@@ -17,6 +17,8 @@ const int GRIPPER_CLAW_MOTOR_ID = 7;				// GripperClaw
 const int GRIPPER_CLAW_LIMIT_OPEN_DIO_ID = 0;
 const int GRIPPER_CLAW_LIMIT_CLOSED_DIO_ID = 1;
 
+const int LIFT_MAST_UPPER_LIMIT_SWITCH_READY_TO_SHOOT_SCALE_POSITION = 9;
+
 // This is how long the gripper claw can move before it's turned off.
 // This is just in case the switches are not working, or there is something
 //  jamming the gripper claw - so the motor won't run when jammed.

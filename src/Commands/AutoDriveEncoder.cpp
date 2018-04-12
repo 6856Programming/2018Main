@@ -139,7 +139,7 @@ void AutoDriveEncoder::Execute()
 		// NOTE: We have to invert the values if the robot
 		//   overall direction is -ve vs +ve.
 
-		const double MAX_CLAMP_ANGLE_FROM_GRYRO = 5.0;
+		const double MAX_CLAMP_ANGLE_FROM_GRYRO = 3.0;
 
 		if ( angleAdjust > MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = MAX_CLAMP_ANGLE_FROM_GRYRO; }
 		if ( angleAdjust < -MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = -MAX_CLAMP_ANGLE_FROM_GRYRO;}
