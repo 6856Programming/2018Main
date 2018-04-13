@@ -123,8 +123,8 @@ void DriveWithJoystick::Execute()
 	double currentDirection = CommandBase::pDriveTrain->get_pGyroHelper()->GetGyroAngleImmediate();
 	::SmartDashboard::PutNumber("Gyro Angle", currentDirection);
 
-	double currentDirAvg = CommandBase::pDriveTrain->get_pGyroHelper()->getGetGyroAngleAverage(1.0);
-	::SmartDashboard::PutNumber("Gyro Angle (avg 1 second)", currentDirAvg);
+//	double currentDirAvg = CommandBase::pDriveTrain->get_pGyroHelper()->getGetGyroAngleAverage(1.0);
+//	::SmartDashboard::PutNumber("Gyro Angle (avg 1 second)", currentDirAvg);
 
 
 	return;

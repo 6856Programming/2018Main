@@ -126,7 +126,9 @@ void AutoDriveEncoder::Execute()
 		// Since the thing is shimmying back and forth, we are going to get the
 		//	average over the last X seconds, instead of the immediate angle
 
-		double angleAdjust = CommandBase::pDriveTrain->get_pGyroHelper()->getGetGyroAngleAverage(0.5);
+		double angleAdjust = CommandBase::pDriveTrain->get_pGyroHelper()->getGetGyroAngleAverage(1.0);
+
+		std::cout << "AutoDriveEncoder: Gyro Angle (average): " << angleAdjust;
 
 		// The angle that is returned could be very large,
 		//  particularly since the max speed range is [-1.0, +1.0]
@@ -148,9 +150,12 @@ void AutoDriveEncoder::Execute()
 		if ( angleAdjust < -MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = -MAX_CLAMP_ANGLE_FROM_GRYRO;}
 
 
-		const double CRAPPY_ANGLE_TO_SPEED_ADJUST_RATIO = 0.1;
+		const double CRAPPY_ANGLE_TO_SPEED_ADJUST_RATIO = 0.05;
 
 		angleAdjust *= CRAPPY_ANGLE_TO_SPEED_ADJUST_RATIO;
+
+		std::cout << ", Adjusted angle: " << angleAdjust << std::endl;
+
 
 		if ( this->m_MovementState.overallDirection > 0 )
 		{

@@ -131,6 +131,9 @@ double cGyroHelper::getGetGyroAngleAverage(void)
 		total += this->m_vecGyroSamples[index].angle;
 	}
 	double average = total / (double)sizeOfVec;
+
+	std::cout << "\t(Gyro Angle based on " << sizeOfVec << " samples)" << std::endl;
+
 	return average;
 }
 

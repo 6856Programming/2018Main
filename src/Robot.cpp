@@ -1,6 +1,5 @@
 #include <Commands/AutoBasicForwardTimerWithDelay.h>
 
-#include <Commands/Waiter.h>
 #include "Robot.h"
 
 //#include "Commands/AutonomousGripper.h"
@@ -13,6 +12,7 @@
 
 #include "Commands/AutoBasicForwardTimerWithDelay.h"
 #include "Commands/Autonomous/cRightStart_Switch_DontCrossField.h"
+#include "Commands/Autonomous/cLeftStart_Switch_DontCrossField.h"
 
 
 // Global, so everyone can use it
@@ -96,7 +96,8 @@ void Robot::AutonomousInit()
 
 	m_chooser.AddDefault("Default Auto", pDefaultAuto );
 
-	m_chooser.AddObject("My Auto", new cRightStart_Switch_DontCrossField() );
+	m_chooser.AddObject("Right Switch (don't cross)", new cRightStart_Switch_DontCrossField() );
+	m_chooser.AddObject("Left Switch (don't cross)", new cLeftStart_Switch_DontCrossField() );
 
 	frc::SmartDashboard::PutData("Auto Modes", &(this->m_chooser) );
 

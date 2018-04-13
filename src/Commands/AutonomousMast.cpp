@@ -62,6 +62,8 @@ bool AutonomousMast::IsFinished()
 
 	if ( timeElapsed > this->m_secondsToRun )
 	{
+		CommandBase::pLiftMast->DEBUG_SetMotorSpeed(0.0);
+
 		return true;
 	}
 
