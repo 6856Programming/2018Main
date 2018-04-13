@@ -24,6 +24,8 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 //	this->m_pLimitSwitchTop = new frc::DigitalInput(LIFT_MAST_UPPER_CONTACT_SWITCH);
 //	this->m_pLimitSwitchBottom = new frc::DigitalInput(LIFT_MAST_LOWER_CONTACT_SWITCH);
 
+	this->m_bMastIsBeingHold = false;
+
 	return;
 }
 
@@ -40,6 +42,9 @@ bool LiftMast::getUpperLimitSwitchStatus(void)
 
 void LiftMast::DEBUG_SetMotorSpeed(double speed)
 {
+	// Disable mast lift hold (as it'e being set by something)
+	this->m_bMastIsBeingHold = false;
+
 	this->m_pLiftMotor->Set(speed);
 
 	return;
@@ -59,6 +64,48 @@ void LiftMast::InitDefaultCommand()
 
 	return;
 }
+
+void LiftMast::EnableMastHold(void)
+{
+	this->m_bMastIsBeingHold = true;
+
+	this->m_pLiftMotor->Set(this->m_MastHoldPower);
+
+	return;
+}
+
+void LiftMast::DisableMastHold(void)
+{
+	this->m_bMastIsBeingHold = false;
+
+	this->m_pLiftMotor->Set(0.0);
+
+	return;
+}
+
+void LiftMast::setMastHoldPower(double holdPowerSpeed) // 30% is default
+{
+	// Should not be negative
+	if ( holdPowerSpeed < 0.0 )
+	{
+		this->m_MastHoldPower = this->m_DEFAULT_MAST_HOLD_POWER;
+	}
+	// Should not be GT 1.0
+	if ( holdPowerSpeed > 1.0 )
+	{
+		this->m_MastHoldPower = 1.0;
+	}
+
+	this->m_MastHoldPower = holdPowerSpeed;
+
+	return;
+}
+
+double LiftMast::getMastHoldPower(void)
+{
+	return this->m_MastHoldPower;
+}
+
 
 
 // NOTE: There was some talk of having pre-set positions for the lift.

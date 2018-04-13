@@ -188,7 +188,7 @@ void sMovementParamHelper::Start_ChangeStateToAccelerating(void)
 		this->m_ChangeState(IS_ACCELERATING);
 	}
 
-
+	this->m_pWatchDogKillTimer->Reset();
 	this->m_pWatchDogKillTimer->Start();
 
 	return;

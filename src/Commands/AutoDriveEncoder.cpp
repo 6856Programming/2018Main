@@ -113,10 +113,10 @@ void AutoDriveEncoder::Execute()
 		double rightEncoder = 0.0;
 
 		CommandBase::pDriveTrain->getEncoderPositionInInches( leftEncoder, rightEncoder );
-		std::cout
-			<< "AutoDriveEncoder:Current state = " << this->m_MovementState.getCurrentStateString()
-			<< ", speed L:R = " << leftSpeed << ":" << rightSpeed
-			<< ", L,R, avg enc = " << leftEncoder << ", " << rightEncoder << ", " << currentDistance << std::endl;
+//		std::cout
+//			<< "AutoDriveEncoder:Current state = " << this->m_MovementState.getCurrentStateString()
+//			<< ", speed L:R = " << leftSpeed << ":" << rightSpeed
+//			<< ", L,R, avg enc = " << leftEncoder << ", " << rightEncoder << ", " << currentDistance << std::endl;
 	}
 
 
@@ -183,11 +183,18 @@ void AutoDriveEncoder::Execute()
 
 bool AutoDriveEncoder::IsFinished()
 {
-	if ( this->m_MovementState.IsDone() || this->m_MovementState.IsStateInvalid() )
+	if ( this->m_MovementState.IsDone() )
 	{
-		// Either we're done or all is lost, forever lost...
+		std::cout << "AutoDriveEncoder() IsDone()" << std::endl;
 		return true;
 	}
+	if ( this->m_MovementState.IsStateInvalid() )
+	{
+		// Either we're done or all is lost, forever lost...
+		std::cout << "AutoDriveEncoder() : IsStateInvalid() returned (watchdog?)" << std::endl;
+		return true;
+	}
+
 
 	// Still have work to do, Holmes.
 	return false;

@@ -45,7 +45,10 @@ public:
 	//	so that we can have direct control of the motor...
 	void DEBUG_SetMotorSpeed(double speed);
 
-
+	void EnableMastHold(void);
+	void DisableMastHold(void);
+	void setMastHoldPower(double holdPowerSpeed);	// 30% is default
+	double getMastHoldPower(void);
 
 //	bool getBottomLimitSwitch(void);
 	bool getUpperLimitSwitchStatus(void);
@@ -55,8 +58,13 @@ private:
 
 	frc::DigitalInput* m_pLimitSwitchUpper;
 
-
 	can::WPI_TalonSRX* m_pLiftMotor;
+
+	// For auto, to "hold" the mast
+	// WARNING: BE VERY CAREFUL SETTING THIS
+	double m_MastHoldPower;
+	const double m_DEFAULT_MAST_HOLD_POWER = 0.30;	// 30%
+	bool m_bMastIsBeingHold;
 
 };
 

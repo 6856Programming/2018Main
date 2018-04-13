@@ -65,6 +65,7 @@ void cGameState::ProcessGameStartUpState(void)
 		this->m_farSwitchPosition = cGameState::RIGHT;
 	}
 
+//	::SmartDashboard::PutString("Near ")
 
 	return;
 }
@@ -87,6 +88,28 @@ cGameState::ePositions cGameState::getScalePosition(void)
 cGameState::ePositions cGameState::getFarSwitchPositions(void)
 {
 	return this->m_farSwitchPosition;
+}
+
+std::string cGameState::DecodePositionEnumString( cGameState::ePositions position )
+{
+	switch (position)
+	{
+	case cGameState::LEFT:
+		return "LEFT";
+		break;
+	case cGameState::CENTRE:
+		return "CENTRE";
+		break;
+	case cGameState::RIGHT:
+		return "RIGHT";
+		break;
+	case cGameState::UNKNOWN:
+	default:
+		return "UNKNOWN";
+		break;
+	};
+
+	return "UNKNOWN";
 }
 
 

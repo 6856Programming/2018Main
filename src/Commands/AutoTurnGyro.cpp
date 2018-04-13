@@ -87,9 +87,9 @@ void AutoTurnGyro::Execute()
 	::SmartDashboard::PutNumber("AutoTurnGyro: Remaining degrees", remainingDegrees );
 	::SmartDashboard::PutNumber("AutoTurnGyro: currentSpeed", speed );
 
-	std::cout
-		<< "AutoTurnGyro: remaining degrees: " << remainingDegrees
-		<< " current speed L, R:" << speed << ", " << -speed << std::endl;
+//	std::cout
+//		<< "AutoTurnGyro: remaining degrees: " << remainingDegrees
+//		<< " current speed L, R:" << speed << ", " << -speed << std::endl;
 
 
 	CommandBase::pDriveTrain->TankDrive( speed, -speed );

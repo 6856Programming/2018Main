@@ -1,10 +1,3 @@
-/*
- * AutonomousMast.h
- *
- *  Created on: Apr 3, 2018
- *      Author: Robotics
- */
-
 #ifndef SRC_COMMANDS_AUTONOMOUSMAST_H_
 #define SRC_COMMANDS_AUTONOMOUSMAST_H_
 

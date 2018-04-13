@@ -7,6 +7,7 @@
 #include "../AutoGripperShoot.h"
 #include "../AutoGripperOpen.h"
 #include "../cWaitDelay.h"
+#include "../AutoMastHoldPosition.h"
 
 // Global, so everyone can use it
 #include "../../cGameState.h"
@@ -39,10 +40,8 @@ cLeftStart_Switch_DontCrossField::cLeftStart_Switch_DontCrossField()
 	// 6. Back away from the switch (and let lift fall, possibly)
 
 	const double STAGE_1_DISTANCE_TO_DRIVE_FORWARD_IN_FEET = 11.0;	// 13.0 FEET
-	const double STATE_4_DISTANCE_TO_DRIVE_FORWARD_IN_FEET = 3.0;	// 2.0 FEET
+	const double STATE_4_DISTANCE_TO_DRIVE_FORWARD_IN_FEET = 2.0;	// 2.0 FEET
 	const double STAGE_6_DISTANCE_TO_DRIVE_BACKWARD_IN_FEET = -2.0f;
-
-	const double LIFT_HOLD_POSITION_POWER = 0.3;		// 30%
 
 
 	// 1. Serial: Forward 13'
@@ -96,19 +95,27 @@ cLeftStart_Switch_DontCrossField::cLeftStart_Switch_DontCrossField()
 
 	// **********************************************
 	// ** If the switch isn't ours, then EXIT HERE **
+	::g_GameState.ProcessGameStartUpState();
 	cGameState::ePositions nearSwitchPos = ::g_GameState.getNearSwitchPosition();
+
+	::SmartDashboard::PutString("Near Switch Location", ::g_GameState.DecodePositionEnumString(nearSwitchPos) );
 
 	if ( nearSwitchPos != cGameState::LEFT )
 	{
 		// Switch isn't on our side, so exit here
+
+		::SmartDashboard::PutString("Near Switch", "Switch is on the RIGHT, so not dropping");
+
 		return;
 	}
+	::SmartDashboard::PutString("Near Switch", "Switch is on the LEFT, so DROPPING");
+
 	// **********************************************
 
 
 	// 2. Serial: Lift at 100% for 0.7 seconds
 	{
-		Command* pLiftMast = new AutonomousMast( 2.0, 		// Lift time in seconds
+		Command* pLiftMast = new AutonomousMast( 2.5, 		// Lift time in seconds
 		                                         1.0 );		// Lift speed (100%)
 
 		this->AddSequential(pLiftMast);
@@ -121,6 +128,7 @@ cLeftStart_Switch_DontCrossField::cLeftStart_Switch_DontCrossField()
 //		Command* pHoldMast = new AutonomousMast( 1.5, 								// Lift time in seconds
 //		                                         LIFT_HOLD_POSITION_POWER );		// Lift speed (30% to 'hold' mast)
 //		this->AddParallel(pHoldMast);
+		this->AddSequential( new AutoMastHoldPosition(true) );
 
 		sMovementParamHelper driveState;
 		driveState.totalDistance = -90.0;		// NEGATIVE, so CLOCKWISE
@@ -156,6 +164,7 @@ cLeftStart_Switch_DontCrossField::cLeftStart_Switch_DontCrossField()
 		driveState.totalDistance = STATE_4_DISTANCE_TO_DRIVE_FORWARD_IN_FEET * 12.0;
 		driveState.maxSpeed = 0.6;
 		driveState.minSpeed = 0.4;
+		driveState.watchDogKillTimeSeconds = 3.0;
 
 		Command* pDriveToSwitch = new AutoDriveEncoder(driveState, false);
 		this->AddSequential( pDriveToSwitch );
@@ -198,7 +207,10 @@ cLeftStart_Switch_DontCrossField::cLeftStart_Switch_DontCrossField()
 		this->AddSequential( pBackAwayFromSwitch );
 	}// ENDOF: Stage 6
 
-
+	// Drop mast
+	{
+		this->AddSequential( new AutoMastHoldPosition(false) );
+	}
 
 	return;
 }

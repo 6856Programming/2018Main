@@ -3,6 +3,8 @@
 
 // Gets the game state
 
+#include <string>
+
 class cGameState
 {
 public:
@@ -28,6 +30,7 @@ public:
 	ePositions getScalePosition(void);
 	ePositions getFarSwitchPositions(void);
 
+	std::string DecodePositionEnumString( ePositions position );
 };
 
 
