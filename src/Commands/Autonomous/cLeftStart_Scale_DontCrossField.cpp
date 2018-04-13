@@ -82,7 +82,7 @@ cLeftStart_Scale_DontCrossField::cLeftStart_Scale_DontCrossField()
 	::g_GameState.ProcessGameStartUpState();
 	cGameState::ePositions nearScaleLocation = ::g_GameState.getScalePosition();
 
-	::SmartDashboard::PutString("Scale Location", ::g_GameState.DecodePositionEnumString(nearScaleLocation) );
+//	::SmartDashboard::PutString("Scale Location", ::g_GameState.DecodePositionEnumString(nearScaleLocation) );
 
 	if ( nearScaleLocation != cGameState::LEFT )
 	{

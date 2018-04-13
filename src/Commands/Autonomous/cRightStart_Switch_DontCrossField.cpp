@@ -98,7 +98,7 @@ cRightStart_Switch_DontCrossField::cRightStart_Switch_DontCrossField()
 	::g_GameState.ProcessGameStartUpState();
 	cGameState::ePositions nearSwitchPos = ::g_GameState.getNearSwitchPosition();
 
-	::SmartDashboard::PutString("Near Switch Location", ::g_GameState.DecodePositionEnumString(nearSwitchPos) );
+//	::SmartDashboard::PutString("Near Switch Location", ::g_GameState.DecodePositionEnumString(nearSwitchPos) );
 
 	if ( nearSwitchPos != cGameState::RIGHT )
 	{

@@ -93,7 +93,7 @@ void AutoBasicForwardTimerWithDelay::Execute()
 		CommandBase::pDriveTrain->ArcadeDrive( 0.0, 0.0 );
 
 		// Done waiting to start?
-		::SmartDashboard::PutNumber( "Auto: Wait to start timer", this->m_pTimerWaitToStart->Get() );
+//		::SmartDashboard::PutNumber( "Auto: Wait to start timer", this->m_pTimerWaitToStart->Get() );
 
 		if ( this->m_pTimerWaitToStart->Get() >= this->m_secondsToWaitToStart )
 		{
@@ -111,7 +111,7 @@ void AutoBasicForwardTimerWithDelay::Execute()
 		CommandBase::pDriveTrain->ArcadeDrive( this->m_speed, 0.0 );
 
 		// Done driving?
-		::SmartDashboard::PutNumber( "Auto: driving time timer", this->m_pTimerDrive->Get() );
+//		::SmartDashboard::PutNumber( "Auto: driving time timer", this->m_pTimerDrive->Get() );
 
 		if ( this->m_pTimerDrive->Get() >= this->m_secondsToRun )
 		{

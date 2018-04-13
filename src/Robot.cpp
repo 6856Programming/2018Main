@@ -14,6 +14,9 @@
 #include "Commands/Autonomous/cRightStart_Switch_DontCrossField.h"
 #include "Commands/Autonomous/cLeftStart_Switch_DontCrossField.h"
 
+#include "Commands/Autonomous/cLeftStart_Scale_DontCrossField.h"
+#include "Commands/Autonomous/cRightStart_Scale_DontCrossField.h"
+
 
 // Global, so everyone can use it
 cGameState g_GameState;
@@ -99,6 +102,9 @@ void Robot::AutonomousInit()
 	m_chooser.AddObject("Right Switch (don't cross)", new cRightStart_Switch_DontCrossField() );
 	m_chooser.AddObject("Left Switch (don't cross)", new cLeftStart_Switch_DontCrossField() );
 
+	m_chooser.AddObject("Right Scale (don't cross)", new cRightStart_Scale_DontCrossField() );
+	m_chooser.AddObject("Left Scale (don't cross)", new cLeftStart_Scale_DontCrossField() );
+
 	frc::SmartDashboard::PutData("Auto Modes", &(this->m_chooser) );
 
 	pAutonomousCommand = m_chooser.GetSelected();
@@ -114,6 +120,12 @@ void Robot::AutonomousInit()
 		std::cout << "Using the Good Old AutoBasicForwardTimerWithDelay() Command";
 		pAutonomousCommand = pDefaultAuto;
 	}
+
+	::g_GameState.ProcessGameStartUpState();
+
+	::SmartDashboard::PutString("Near Switch:", ::g_GameState.DecodePositionEnumString( ::g_GameState.getNearSwitchPosition() ) );
+	::SmartDashboard::PutString("Scale:", ::g_GameState.DecodePositionEnumString( ::g_GameState.getScalePosition() ) );
+	::SmartDashboard::PutString("Far Switch:", ::g_GameState.DecodePositionEnumString( ::g_GameState.getFarSwitchPositions() ) );
 
 
 //	// *****************************************************************************
