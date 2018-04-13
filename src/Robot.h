@@ -1,6 +1,7 @@
 #ifndef _ROBOT_HG_
 #define _ROBOT_HG_
 
+#include <cGameState.h>
 #include <iostream>
 #include <WPILib.h>
 #include <Commands/Command.h>
@@ -13,9 +14,14 @@
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
 
+#include "cGameState.h"
 
+
+// Global, so everyone can use it
+extern cGameState g_GameState;
 
 //#include "S"
+
 
 class Robot : public frc::TimedRobot
 {
@@ -30,26 +36,7 @@ public:
 	void TeleopPeriodic() override;
 	void TestPeriodic() override;
 
-	// These are the positions of the driver stations, switch, and scale
-	enum ePositions
-	{
-		LEFT, CENTRE, RIGHT, UNKNOWN
-	};
-private:
-	ePositions m_driverStationPosition;		// Left, Centre, or Right
-	// Note: the FMS sends sides based on aliance colour
-	// So these are 'our' positions, in other words...
-	ePositions m_nearSwitchPosition;			// Left or Right
-	ePositions m_scalePosition;				// Left or Right
-	ePositions m_farSwitchPosition;			// Left or Right
-public:
-	// Will populate the positions based on init game state
-	void ProcessGameStartUpState(void);
 
-	ePositions getDirverStationPosition(void);
-	ePositions getNearSwitchPosition(void);
-	ePositions getScalePosition(void);
-	ePositions getFarSwitchPositions(void);
 
 	// Will place the default smart dashboard settings
 	void InitSmartDashboardDefaults(void);

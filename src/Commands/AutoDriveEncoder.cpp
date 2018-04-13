@@ -16,7 +16,7 @@ AutoDriveEncoder::AutoDriveEncoder(double inchesToDrive, double speed, bool bUse
 
 	if ( this->m_bUseGyroToDriveStraight )
 	{
-		CommandBase::pDriveTrain->Gyro_Reset();
+		CommandBase::pDriveTrain->get_pGyroHelper()->ResetGyro();
 	}
 /*
 	std::string error = "";
@@ -50,7 +50,7 @@ AutoDriveEncoder::AutoDriveEncoder( sMovementParamHelper moveParams, bool bUseGy
 
 	if ( this->m_bUseGyroToDriveStraight )
 	{
-		CommandBase::pDriveTrain->Gyro_Reset();
+		CommandBase::pDriveTrain->get_pGyroHelper()->ResetGyro();
 	}
 /*
 	std::string error = "";
@@ -123,7 +123,10 @@ void AutoDriveEncoder::Execute()
 
 	if ( this->m_bUseGyroToDriveStraight )
 	{
-		double angleAdjust = CommandBase::pDriveTrain->Gyro_GetAngle();
+		// Since the thing is shimmying back and forth, we are going to get the
+		//	average over the last X seconds, instead of the immediate angle
+
+		double angleAdjust = CommandBase::pDriveTrain->get_pGyroHelper()->getGetGyroAngleAverage(0.5);
 
 		// The angle that is returned could be very large,
 		//  particularly since the max speed range is [-1.0, +1.0]
@@ -139,7 +142,7 @@ void AutoDriveEncoder::Execute()
 		// NOTE: We have to invert the values if the robot
 		//   overall direction is -ve vs +ve.
 
-		const double MAX_CLAMP_ANGLE_FROM_GRYRO = 3.0;
+		const double MAX_CLAMP_ANGLE_FROM_GRYRO = 2.0;
 
 		if ( angleAdjust > MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = MAX_CLAMP_ANGLE_FROM_GRYRO; }
 		if ( angleAdjust < -MAX_CLAMP_ANGLE_FROM_GRYRO )	{ angleAdjust = -MAX_CLAMP_ANGLE_FROM_GRYRO;}

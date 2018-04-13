@@ -64,7 +64,7 @@ void AutoTurnGyro::Initialize()
 	std::cout << "[AutoTurnGyro::Initialize()] called" << std::endl;
 	std::cout << "[AutoTurnGyro::Initialize()] calling: Start_ChangeStateToAccelerating()" << std::endl;
 
-	CommandBase::pDriveTrain->Gyro_Reset();
+	CommandBase::pDriveTrain->get_pGyroHelper()->ResetGyro();
 
 	this->m_MovementState.Start_ChangeStateToAccelerating();
 
@@ -78,7 +78,7 @@ void AutoTurnGyro::Execute()
 //	std::cout << "[AutoDriveEncoder::Execute()] called..." << std::endl;
 
 	// Get current encoder values
-	double currentAngle = CommandBase::pDriveTrain->Gyro_GetAngle();
+	double currentAngle = CommandBase::pDriveTrain->get_pGyroHelper()->GetGyroAngleImmediate();
 
 	double speed = this->m_MovementState.CalculateSpeedAndUpdateState( currentAngle );
 

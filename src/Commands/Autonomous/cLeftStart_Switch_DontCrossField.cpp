@@ -12,6 +12,10 @@
 #include "../AutonomousMast.h"
 #include "../AutoGripperShoot.h"
 
+// Global, so everyone can use it
+#include "../../cGameState.h"
+extern cGameState g_GameState;
+
 // S: Forward 13'
 // S: Lift at 100% for 0.7 seconds
 // P: Hold at 30%

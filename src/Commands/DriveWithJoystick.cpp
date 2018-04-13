@@ -31,7 +31,7 @@ void DriveWithJoystick::Initialize()
 	std::cout << "[DriveWithJoystick] Initialized" << std::endl;
 
 	std::cout << "DriveWithJoystick::Initialize(): Resetting Gyro" << std::endl;
-	CommandBase::pDriveTrain->Gyro_Reset();
+	CommandBase::pDriveTrain->get_pGyroHelper()->ResetGyro();
 
 	return;
 }
@@ -120,8 +120,11 @@ void DriveWithJoystick::Execute()
 //	::SmartDashboard::PutNumber( "DEBUG: RightRear Velocity", pDT->DEBUG_getEncoderVelocityFromMotorID(DriveTrain::RIGHT_REAR) );
 
 
-	double currentDirection = CommandBase::pDriveTrain->Gyro_GetAngle();
+	double currentDirection = CommandBase::pDriveTrain->get_pGyroHelper()->GetGyroAngleImmediate();
 	::SmartDashboard::PutNumber("Gyro Angle", currentDirection);
+
+	double currentDirAvg = CommandBase::pDriveTrain->get_pGyroHelper()->getGetGyroAngleAverage(1.0);
+	::SmartDashboard::PutNumber("Gyro Angle (avg 1 second)", currentDirAvg);
 
 
 	return;
@@ -203,6 +206,7 @@ void DriveWithJoystick::DEBUG_ControllerTestMotors(void)
 }
 
 // If the driver A, B, X, AND Y are pressed AT THE SAME TIME, the gyro calibrates
+// *** WARNING: This will isolate the gyro for 5 seconds!! ***
 void DriveWithJoystick::CheckForGyroCalibration(void)
 {
 	frc::XboxController* pJoyDriver = CommandBase::pOI->GetJoystickDrive();
@@ -210,9 +214,8 @@ void DriveWithJoystick::CheckForGyroCalibration(void)
 	if ( pJoyDriver->GetAButton() && pJoyDriver->GetBButton() &&
 	     pJoyDriver->GetXButton() && pJoyDriver->GetYButton() )
 	{
-		CommandBase::pDriveTrain->Gyro_Calibrate();
+		CommandBase::pDriveTrain->get_pGyroHelper()->CalibrateGyro();
 	}
-
 
 	return;
 }

@@ -35,18 +35,12 @@ DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 	this->m_wheelDiameterInches = this->m_DEFAULT_WHEEL_DIAMETER_INCHES;
 	this->m_encoderTicksPerRevolution = this->m_DEFAULT_TICKS_PER_REVOLUTION;
 
-
-	this->m_pGyro = new frc::ADXRS450_Gyro();
-
-	this->m_pGyro->Reset();
-
-	this->m_pGyroCalibrationTimer = new frc::Timer();
-	this->m_pGyroCalibrationTimer->Reset();
-
-	this->m_bGyroIsCalibrating = false;
+	this->m_pGyroHelper = new cGyroHelper();
+	this->m_pGyroHelper->ResetGyro();
 
 	this->m_bLeftEncoderReturnValueIsInverted = false;
 	this->m_bRightEncoderReturnValueIsInverted = false;
+
 
 
 	return;
@@ -362,6 +356,14 @@ void DriveTrain::getEncoderPositionInInches(double &leftEncoder, double &rightEn
 	return;
 }
 
+// *** Wrappers for the Gyro helper ***
+cGyroHelper* DriveTrain::get_pGyroHelper(void)
+{
+	return this->m_pGyroHelper;
+}
+
+
+
 
 void DriveTrain::getEncoderVelocityInInches(double &leftEncoder, double &rightEncoder)
 {
@@ -374,84 +376,6 @@ void DriveTrain::getEncoderVelocityInInches(double &leftEncoder, double &rightEn
 
 	return;
 }
-
-double DriveTrain::Gyro_GetAngle()
-{
-	if ( this->IsGyroCalibrating() )
-	{
-		return 0.0;
-	}
-
-	return this->m_pGyro->GetAngle();
-}
-
-double DriveTrain::Gyro_GetRate()
-{
-	if ( this->IsGyroCalibrating() )
-	{
-		return 0.0;
-	}
-	return this->m_pGyro->GetRate();
-}
-
-void DriveTrain::Gyro_Reset()
-{
-	if ( this->IsGyroCalibrating() )
-	{
-		return;
-	}
-
-	this->m_pGyro->Reset();
-
-	return;
-}
-
-void DriveTrain::Gyro_Calibrate()
-{
-	// Starts a timer for x seconds to allow the gyro to calibrate
-	this->m_pGyroCalibrationTimer->Reset();
-	this->m_pGyroCalibrationTimer->Start();
-	this->m_bGyroIsCalibrating = true;
-
-	std::cout << "*********************************************************" << std::endl;
-	std::cout << "    BEGIN GYRO CALIBRATION. Don't move robot, please.    " << std::endl;
-	std::cout << "(calibration will take " << this->m_GYRO_CALIBRATION_COUNTDOWN_TIME << " seconds)" << std::endl;
-	std::cout << "*********************************************************" << std::endl;
-
-
-	this->m_pGyro->Calibrate();
-	return;
-}
-
-// Returns true if timer is running and time is
-bool DriveTrain::IsGyroCalibrating(void)
-{
-	if ( this->m_bGyroIsCalibrating )
-	{
-		// Done?
-		if ( this->m_pGyroCalibrationTimer->Get() >= this->m_GYRO_CALIBRATION_COUNTDOWN_TIME )
-		{
-			std::cout << "**********************************" << std::endl;
-			std::cout << "    GYRO CALIBRATION COMPLETE.    " << std::endl;
-			std::cout << "**********************************" << std::endl;
-
-			this->m_bGyroIsCalibrating = false;
-		}
-	}
-
-	return this->m_bGyroIsCalibrating;
-}
-
-
-// You aren't really supposed to call this...
-frc::ADXRS450_Gyro* DriveTrain::pGetGyroRawPointer(void)
-{
-	return this->m_pGyro;
-}
-
-
-
-
 
 
 

@@ -6,14 +6,12 @@
 #include <ctre/Phoenix.h>
 #include <SpeedControllerGroup.h>
 #include <Drive/DifferentialDrive.h>
-#include <ADXRS450_Gyro.h>
+#include "cGyroHelper.h"
 #include "../RobotMap.h"
+#include <vector>
 
 #include <iostream>
 
-/**
- *
- */
 
 class DriveTrain: public frc::Subsystem
 {
@@ -74,17 +72,7 @@ public:
 	void setWheelDiameterInches(double wheelDiameterInInches);
 	double getWheelDiameterInches(void);
 
-
-	double Gyro_GetAngle();
-	double Gyro_GetRate();
-	void Gyro_Reset();
-	void Gyro_Calibrate();
-
-	// You aren't really supposed to call this...
-	frc::ADXRS450_Gyro* pGetGyroRawPointer(void);
-
-	// Returns true if timer is running and time is
-	bool IsGyroCalibrating(void);
+	cGyroHelper* get_pGyroHelper(void);
 
 
 private:
@@ -98,13 +86,8 @@ private:
 
 	frc::DifferentialDrive* pRobotDrive;
 
-	frc::ADXRS450_Gyro* m_pGyro;
+	cGyroHelper* m_pGyroHelper;
 
-	// This will alow a few seconds to calibrate the gyro.
-	// When it's calibrating, you can't call anything on the gyro
-	frc::Timer* m_pGyroCalibrationTimer;
-	const double m_GYRO_CALIBRATION_COUNTDOWN_TIME = 5.0;
-	bool m_bGyroIsCalibrating;	// = false
 
 	double m_wheelDiameterInches;			// Is explicitly set
 	double m_encoderTicksPerRevolution;		// Is explicitly set
