@@ -1,15 +1,18 @@
-/*
- * cLeftStart_Scale_DontCrossField.h
- *
- *  Created on: Apr 13, 2018
- *      Author: mfeeney
- */
+#ifndef _cLeftStart_Scale_DontCrossField_HG_
+#define _cLeftStart_Scale_DontCrossField_HG_
 
-#ifndef SRC_COMMANDS_AUTONOMOUS_CLEFTSTART_SCALE_DONTCROSSFIELD_H_
-#define SRC_COMMANDS_AUTONOMOUS_CLEFTSTART_SCALE_DONTCROSSFIELD_H_
+#include <Commands/CommandGroup.h>
 
+// Start from LEFT side.
+// Go for LEFT SCALE (DON'T cross field)
+// Drop on switch if it's correct side,
+//  otherwise, just drive forward
 
+class cLeftStart_Scale_DontCrossField : public frc::CommandGroup
+{
+public:
+	cLeftStart_Scale_DontCrossField();
+};
 
+#endif // cLeftStart_Switch_DontCrossField
 
-
-#endif /* SRC_COMMANDS_AUTONOMOUS_CLEFTSTART_SCALE_DONTCROSSFIELD_H_ */

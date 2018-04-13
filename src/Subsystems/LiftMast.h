@@ -51,7 +51,7 @@ public:
 	double getMastHoldPower(void);
 
 //	bool getBottomLimitSwitch(void);
-	bool getUpperLimitSwitchStatus(void);
+	bool isUpperLimitSwitchClosed(void);
 
 private:
 //	frc::DigitalInput* m_pLimitSwitchBottom;	// On DIO pins 2 & 3

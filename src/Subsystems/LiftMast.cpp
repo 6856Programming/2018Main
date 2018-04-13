@@ -34,9 +34,13 @@ LiftMast::LiftMast() : frc::Subsystem("LiftMast")
 //	return this->m_pLimitSwitchBottom->Get();
 //}
 
-bool LiftMast::getUpperLimitSwitchStatus(void)
+
+bool LiftMast::isUpperLimitSwitchClosed(void)
 {
-	return this->m_pLimitSwitchUpper->Get();
+	// Original state (from ditital switch):
+	// - false = Open
+	// - true = Closed
+	return ! this->m_pLimitSwitchUpper->Get();
 }
 //
 

@@ -67,8 +67,10 @@ void LiftControl::Execute()
 
 
 	// Show limit switch state
-	::SmartDashboard::PutString("Upper Limit Switch",
-	                            ::CommandBase::pLiftMast->getUpperLimitSwitchStatus() ? "OPEN" : "CLOSED" );
+//	::SmartDashboard::PutString("Upper Limit Switch",
+//	                            ::CommandBase::pLiftMast->getUpperLimitSwitchStatus() ? "OPEN" : "CLOSED" );
+	::SmartDashboard::PutString("Upper Limit Switch is:",
+	                            ::CommandBase::pLiftMast->isUpperLimitSwitchClosed() ? "CLOSED" : "OPEN" );
 
 	return;
 }
